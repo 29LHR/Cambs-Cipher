@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="{{ url_for('static', filename='logo.png') }}" />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='Styling/base.css') }}"
+    />
+    <title>Playfair Cipher - The Cambridge Cipher</title>
+    <style>
+      .help-container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 40px 20px;
+      }
+      .help-card {
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        padding: 40px;
+        margin-bottom: 24px;
+      }
+      .help-card h1 {
+        color: #800000;
+        margin-top: 0;
+      }
+      .help-card h2 {
+        color: #800000;
+        border-bottom: 2px solid #800000;
+        padding-bottom: 8px;
+      }
+      .example-box {
+        background: #f5f5f5;
+        border-left: 4px solid #800000;
+        padding: 16px 20px;
+        margin: 16px 0;
+        font-family: monospace;
+        font-size: 1.1rem;
+      }
+      .back-link {
+        display: inline-block;
+        color: #800000;
+        text-decoration: none;
+        font-weight: 600;
+        margin-bottom: 20px;
+      }
+      .back-link:hover {
+        text-decoration: underline;
+      }
+      .grid-table {
+        border-collapse: collapse;
+        margin: 16px auto;
+      }
+      .grid-table td {
+        border: 2px solid #800000;
+        padding: 12px 16px;
+        text-align: center;
+        font-family: monospace;
+        font-size: 1.2rem;
+        font-weight: bold;
+      }
+      .highlight {
+        background: #ffe0b2;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <button
+        class="menu-toggle"
+        aria-controls="primary-nav"
+        aria-expanded="false"
+        aria-label="Toggle menu"
+      >
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </button>
+      <nav id="primary-nav" class="nav">
+        <a href="/">Home</a>
+        <a href="/challenges">Challenges</a>
+        <a href="/leaderboard">Leaderboard</a>
+        <a href="/dashboard">Dashboard</a>
+      </nav>
+      <a class="brand" href="/">The Cambridge Cipher</a>
+    </div>
+
+    <div class="help-container">
+      <a href="/" class="back-link">← Back to Home</a>
+
+      <div class="help-card">
+        <h1>🔐 The Playfair Cipher</h1>
+        <p>
+          The Playfair Cipher encrypts pairs of letters (digraphs) using a 5×5
+          grid. It was used by the British in World War I and II.
+        </p>
+
+        <h2>Creating the Key Grid</h2>
+        <ol>
+          <li>Choose a keyword (e.g., "MONARCHY")</li>
+          <li>Remove duplicate letters from the keyword</li>
+          <li>Fill a 5×5 grid with the keyword, then remaining letters</li>
+          <li>I and J share the same position (25 letters fit in 25 cells)</li>
+        </ol>
+
+        <p><strong>Keyword: MONARCHY</strong></p>
+        <table class="grid-table">
+          <tr>
+            <td class="highlight">M</td>
+            <td class="highlight">O</td>
+            <td class="highlight">N</td>
+            <td class="highlight">A</td>
+            <td class="highlight">R</td>
+          </tr>
+          <tr>
+            <td class="highlight">C</td>
+            <td class="highlight">H</td>
+            <td class="highlight">Y</td>
+            <td>B</td>
+            <td>D</td>
+          </tr>
+          <tr>
+            <td>E</td>
+            <td>F</td>
+            <td>G</td>
+            <td>I/J</td>
+            <td>K</td>
+          </tr>
+          <tr>
+            <td>L</td>
+            <td>P</td>
+            <td>Q</td>
+            <td>S</td>
+            <td>T</td>
+          </tr>
+          <tr>
+            <td>U</td>
+            <td>V</td>
+            <td>W</td>
+            <td>X</td>
+            <td>Z</td>
+          </tr>
+        </table>
+
+        <h2>Encryption Rules</h2>
+        <ol>
+          <li>
+            <strong>Split plaintext into pairs:</strong> HE LL O → HE LX LO
+            (insert X between double letters)
+          </li>
+          <li><strong>If odd length:</strong> Add X at the end</li>
+          <li>
+            <strong>For each pair, find both letters in the grid:</strong>
+          </li>
+        </ol>
+
+        <h3>Same Row</h3>
+        <p>Replace each letter with the one to its right (wrap around)</p>
+        <div class="example-box">AR → RM</div>
+
+        <h3>Same Column</h3>
+        <p>Replace each letter with the one below (wrap around)</p>
+        <div class="example-box">MU → CM</div>
+
+        <h3>Rectangle</h3>
+        <p>
+          Replace each letter with the one in its row but the other letter's
+          column
+        </p>
+        <div class="example-box">
+          HE → The H row and E column → BP → The E row and H column → FH Result:
+          HE → BF
+        </div>
+
+        <h2>Example Encryption</h2>
+        <p><strong>Plaintext:</strong> HELLO</p>
+        <div class="example-box">
+          1. Split: HE LL O 2. Handle doubles: HE LX LO 3. Encrypt each pair
+          using the grid rules
+        </div>
+
+        <h2>How to Crack It</h2>
+        <ol>
+          <li>
+            <strong>Identify digraph frequencies:</strong> Common English
+            digraphs are TH, HE, IN, ER, AN
+          </li>
+          <li>
+            <strong>Look for reversed pairs:</strong> If AB encrypts to XY, then
+            BA encrypts to YX
+          </li>
+          <li>
+            <strong>Spot double-letter markers:</strong> X often indicates split
+            double letters
+          </li>
+          <li>
+            <strong>Try common words:</strong> THE becomes TH EX → look for this
+            pattern
+          </li>
+        </ol>
+
+        <h2>Tips</h2>
+        <ul>
+          <li>The ciphertext length is always even</li>
+          <li>X appearing frequently might indicate padding</li>
+          <li>I and J are interchangeable when decrypting</li>
+          <li>No letter can be encrypted as itself in a pair</li>
+        </ul>
+      </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='Styling/menuBar.js') }}"></script>
+  </body>
+</html>

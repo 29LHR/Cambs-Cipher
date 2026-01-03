@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="{{ url_for('static', filename='logo.png') }}" />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='Styling/base.css') }}"
+    />
+    <title>Substitution Cipher - The Cambridge Cipher</title>
+    <style>
+      .help-container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 40px 20px;
+      }
+      .help-card {
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        padding: 40px;
+        margin-bottom: 24px;
+      }
+      .help-card h1 {
+        color: #800000;
+        margin-top: 0;
+      }
+      .help-card h2 {
+        color: #800000;
+        border-bottom: 2px solid #800000;
+        padding-bottom: 8px;
+      }
+      .example-box {
+        background: #f5f5f5;
+        border-left: 4px solid #800000;
+        padding: 16px 20px;
+        margin: 16px 0;
+        font-family: monospace;
+        font-size: 1.1rem;
+        overflow-x: auto;
+      }
+      .back-link {
+        display: inline-block;
+        color: #800000;
+        text-decoration: none;
+        font-weight: 600;
+        margin-bottom: 20px;
+      }
+      .back-link:hover {
+        text-decoration: underline;
+      }
+      .freq-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 16px 0;
+      }
+      .freq-table td,
+      .freq-table th {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: center;
+      }
+      .freq-table th {
+        background: #800000;
+        color: white;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <button
+        class="menu-toggle"
+        aria-controls="primary-nav"
+        aria-expanded="false"
+        aria-label="Toggle menu"
+      >
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </button>
+      <nav id="primary-nav" class="nav">
+        <a href="/">Home</a>
+        <a href="/challenges">Challenges</a>
+        <a href="/leaderboard">Leaderboard</a>
+        <a href="/dashboard">Dashboard</a>
+      </nav>
+      <a class="brand" href="/">The Cambridge Cipher</a>
+    </div>
+
+    <div class="help-container">
+      <a href="/" class="back-link">← Back to Home</a>
+
+      <div class="help-card">
+        <h1>🔐 The Substitution Cipher</h1>
+        <p>
+          A substitution cipher replaces each letter with another letter
+          according to a fixed rule. Unlike Caesar cipher, the replacement
+          doesn't follow a simple shift pattern.
+        </p>
+
+        <h2>How It Works</h2>
+        <p>Create a scrambled alphabet to use as the key:</p>
+        <div class="example-box">
+          Plain: A B C D E F G H I J K L M N O P Q R S T U V W X Y Z Cipher: Q W
+          E R T Y U I O P A S D F G H J K L Z X C V B N M
+        </div>
+        <p>
+          Each letter in the plaintext is replaced with its corresponding cipher
+          letter.
+        </p>
+
+        <h2>Example</h2>
+        <p><strong>Plaintext:</strong> HELLO</p>
+        <div class="example-box">
+          H → I E → T L → S L → S O → G
+
+          <strong>Ciphertext: ITSSG</strong>
+        </div>
+
+        <h2>Frequency Analysis</h2>
+        <p>
+          The key to cracking substitution ciphers is knowing how often letters
+          appear in English:
+        </p>
+        <table class="freq-table">
+          <tr>
+            <th>Letter</th>
+            <th>E</th>
+            <th>T</th>
+            <th>A</th>
+            <th>O</th>
+            <th>I</th>
+            <th>N</th>
+            <th>S</th>
+            <th>H</th>
+            <th>R</th>
+          </tr>
+          <tr>
+            <td><strong>Frequency</strong></td>
+            <td>12.7%</td>
+            <td>9.1%</td>
+            <td>8.2%</td>
+            <td>7.5%</td>
+            <td>7.0%</td>
+            <td>6.7%</td>
+            <td>6.3%</td>
+            <td>6.1%</td>
+            <td>6.0%</td>
+          </tr>
+        </table>
+
+        <h2>How to Crack It</h2>
+        <ol>
+          <li><strong>Count letter frequencies</strong> in the ciphertext</li>
+          <li>
+            <strong>Match to English frequencies:</strong> The most common
+            letter is probably E
+          </li>
+          <li>
+            <strong>Look for patterns:</strong>
+            <ul>
+              <li>Single-letter words → A or I</li>
+              <li>Most common 2-letter words → OF, TO, IN, IT, IS</li>
+              <li>Most common 3-letter words → THE, AND, FOR, ARE</li>
+              <li>Double letters → LL, SS, EE, OO, TT</li>
+            </ul>
+          </li>
+          <li>
+            <strong>Make educated guesses</strong> and check if words make sense
+          </li>
+          <li>
+            <strong>Use context clues</strong> from partially decoded words
+          </li>
+        </ol>
+
+        <h2>Common Patterns</h2>
+        <ul>
+          <li><strong>Q is almost always followed by U</strong></li>
+          <li>
+            <strong>TH</strong> is the most common digraph (two-letter combo)
+          </li>
+          <li><strong>-ING, -TION, -ED</strong> are common word endings</li>
+          <li><strong>THE</strong> is the most common word in English</li>
+        </ul>
+
+        <h2>Tips</h2>
+        <ul>
+          <li>Start with the most frequent letters and common words</li>
+          <li>Write out your substitution alphabet as you discover letters</li>
+          <li>Be prepared to backtrack if your guesses don't work out</li>
+          <li>
+            Longer texts are easier to crack due to more data for frequency
+            analysis
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='Styling/menuBar.js') }}"></script>
+  </body>
+</html>

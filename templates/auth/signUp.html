@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="{{ url_for('static', filename='logo.png') }}" />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='Styling/auth.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='Styling/base.css') }}"
+    />
+    <title>Sign Up - The Cambridge Cipher</title>
+  </head>
+  <body>
+    <div class="header">
+      <button
+        class="menu-toggle"
+        aria-controls="primary-nav"
+        aria-expanded="false"
+        aria-label="Toggle menu"
+      >
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </button>
+
+      <nav id="primary-nav" class="nav">
+        <a href="/">Home</a>
+        <a href="/challenges">Challenges</a>
+        <a href="/leaderboard">Leaderboard</a>
+        <a href="/dashboard">Dashboard</a>
+      </nav>
+      <a class="brand" href="/" aria-current="page">The Cambridge Cipher</a>
+    </div>
+
+    <div class="auth-container">
+      <div class="auth-box">
+        <h1>Create an Account (Team Captains only)</h1>
+
+        {% with messages = get_flashed_messages(with_categories=true) %} {% for
+        category, message in messages %}
+        <p class="{{ category }}">{{ message }}</p>
+        {% endfor %} {% endwith %}
+
+        <form action="{{ url_for('register') }}" method="post">
+          {{ form.hidden_tag() }}
+          <label for="firstName">First Name:</label>
+          <input
+            type="text"
+            id="firstName"
+            name="firstName"
+            value="{{ form.firstName.data or '' }}"
+            required
+          />
+          {% for error in form.firstName.errors %}
+          <span class="field-error">{{ error }}</span>
+          {% endfor %}
+          <label for="lastName">Last Name:</label>
+          <input
+            type="text"
+            id="lastName"
+            name="lastName"
+            value="{{ form.lastName.data or '' }}"
+            required
+          />
+          {% for error in form.lastName.errors %}
+          <span class="field-error">{{ error }}</span>
+          {% endfor %}
+          <label for="email">Email:</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            value="{{ form.email.data or '' }}"
+            required
+          />
+          {% for error in form.email.errors %}
+          <span class="field-error">{{ error }}</span>
+          {% endfor %}
+          <label for="birthdate">Date of Birth:</label>
+          <input
+            type="date"
+            id="birthdate"
+            name="birthdate"
+            value="{{ form.birthdate.data or '' }}"
+            required
+          />
+          {% for error in form.birthdate.errors %}
+          <span class="field-error">{{ error }}</span>
+          {% endfor %}
+          <label for="school">School:</label>
+          <input
+            type="text"
+            id="school"
+            name="school"
+            value="{{ form.school.data or '' }}"
+            required
+          />
+          {% for error in form.school.errors %}
+          <span class="field-error">{{ error }}</span>
+          {% endfor %}
+          <label for="username">Username:</label>
+          <input
+            type="text"
+            id="username"
+            name="username"
+            value="{{ form.username.data or '' }}"
+            required
+          />
+          {% for error in form.username.errors %}
+          <span class="field-error">{{ error }}</span>
+          {% endfor %}
+          <label for="password">Password:</label>
+          <input type="password" id="password" name="password" required />
+          {% for error in form.password.errors %}
+          <span class="field-error">{{ error }}</span>
+          {% endfor %}
+          <p class="password-hint">
+            Password must be at least 8 characters with uppercase, lowercase,
+            and a number.
+          </p>
+          <button type="submit">Sign Up</button>
+        </form>
+
+        <div class="auth-links">
+          <p>Already have an account? <a href="/auth/login">Login here</a></p>
+        </div>
+      </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='Styling/menuBar.js') }}"></script>
+  </body>
+</html>

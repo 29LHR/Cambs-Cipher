@@ -1,0 +1,1 @@
+gunicorn -b 127.0.0.1:5500 -w 4 app:app

@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="{{ url_for('static', filename='logo.png') }}" />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='Styling/base.css') }}"
+    />
+    <title>Transposition Cipher - The Cambridge Cipher</title>
+    <style>
+      .help-container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 40px 20px;
+      }
+      .help-card {
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        padding: 40px;
+        margin-bottom: 24px;
+      }
+      .help-card h1 {
+        color: #800000;
+        margin-top: 0;
+      }
+      .help-card h2 {
+        color: #800000;
+        border-bottom: 2px solid #800000;
+        padding-bottom: 8px;
+      }
+      .example-box {
+        background: #f5f5f5;
+        border-left: 4px solid #800000;
+        padding: 16px 20px;
+        margin: 16px 0;
+        font-family: monospace;
+        font-size: 1.1rem;
+      }
+      .back-link {
+        display: inline-block;
+        color: #800000;
+        text-decoration: none;
+        font-weight: 600;
+        margin-bottom: 20px;
+      }
+      .back-link:hover {
+        text-decoration: underline;
+      }
+      .grid-table {
+        border-collapse: collapse;
+        margin: 16px 0;
+      }
+      .grid-table td,
+      .grid-table th {
+        border: 2px solid #800000;
+        padding: 10px 14px;
+        text-align: center;
+        font-family: monospace;
+        font-size: 1.1rem;
+      }
+      .grid-table th {
+        background: #800000;
+        color: white;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <button
+        class="menu-toggle"
+        aria-controls="primary-nav"
+        aria-expanded="false"
+        aria-label="Toggle menu"
+      >
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </button>
+      <nav id="primary-nav" class="nav">
+        <a href="/">Home</a>
+        <a href="/challenges">Challenges</a>
+        <a href="/leaderboard">Leaderboard</a>
+        <a href="/dashboard">Dashboard</a>
+      </nav>
+      <a class="brand" href="/">The Cambridge Cipher</a>
+    </div>
+
+    <div class="help-container">
+      <a href="/" class="back-link">← Back to Home</a>
+
+      <div class="help-card">
+        <h1>🔐 The Transposition Cipher</h1>
+        <p>
+          Unlike substitution ciphers that replace letters, transposition
+          ciphers rearrange the order of letters. The letters stay the same, but
+          their positions change!
+        </p>
+
+        <h2>Rail Fence Cipher</h2>
+        <p>
+          Write the message in a zigzag pattern across multiple "rails", then
+          read off each rail.
+        </p>
+        <p><strong>Plaintext:</strong> WE ARE DISCOVERED FLEE AT ONCE</p>
+        <p><strong>Rails:</strong> 3</p>
+        <div class="example-box">
+          W . . . E . . . C . . . R . . . L . . . T . . . E . E . R . D . S . O
+          . E . E . F . E . A . O . C . . . A . . . I . . . V . . . D . . . E .
+          . . N . . Read off: WECRL TEERD SOEEF EAOCA IVDEN
+        </div>
+
+        <h2>Columnar Transposition</h2>
+        <p>
+          Write the message in rows under a keyword, then read off columns in
+          alphabetical order of the keyword.
+        </p>
+        <p><strong>Plaintext:</strong> ATTACK AT DAWN</p>
+        <p><strong>Keyword:</strong> ZEBRA</p>
+
+        <table class="grid-table">
+          <tr>
+            <th>Z(5)</th>
+            <th>E(2)</th>
+            <th>B(1)</th>
+            <th>R(4)</th>
+            <th>A(0)</th>
+          </tr>
+          <tr>
+            <td>A</td>
+            <td>T</td>
+            <td>T</td>
+            <td>A</td>
+            <td>C</td>
+          </tr>
+          <tr>
+            <td>K</td>
+            <td>A</td>
+            <td>T</td>
+            <td>D</td>
+            <td>A</td>
+          </tr>
+          <tr>
+            <td>W</td>
+            <td>N</td>
+            <td>X</td>
+            <td>X</td>
+            <td>X</td>
+          </tr>
+        </table>
+
+        <div class="example-box">
+          Read columns in order (A=0, B=1, E=2, R=4, Z=5): Column A: CAX Column
+          B: TTX Column E: TAN Column R: ADX Column Z: AKW
+
+          <strong>Ciphertext: CAXTTXTANADXAKW</strong>
+        </div>
+
+        <h2>How to Crack It</h2>
+        <ol>
+          <li>
+            <strong>Letter frequency:</strong> Since letters aren't changed, the
+            frequency should match normal English
+          </li>
+          <li>
+            <strong>Find the key length:</strong> Try different column widths
+            until patterns emerge
+          </li>
+          <li>
+            <strong>Look for common digraphs:</strong> TH, HE, IN should appear
+            when columns are correctly ordered
+          </li>
+          <li>
+            <strong>Anagram solving:</strong> Once you have the columns, try
+            rearranging them
+          </li>
+        </ol>
+
+        <h2>Types of Transposition</h2>
+        <ul>
+          <li><strong>Rail Fence:</strong> Zigzag pattern</li>
+          <li><strong>Columnar:</strong> Read columns in key order</li>
+          <li>
+            <strong>Route Cipher:</strong> Fill a grid, read in a specific
+            pattern (spiral, diagonal, etc.)
+          </li>
+          <li>
+            <strong>Scytale:</strong> Ancient Greek - wrap paper around a rod
+          </li>
+        </ul>
+
+        <h2>Tips</h2>
+        <ul>
+          <li>
+            Check if letter frequencies match normal English (means substitution
+            wasn't used)
+          </li>
+          <li>
+            The message length divided by possible key lengths gives grid
+            dimensions
+          </li>
+          <li>Padding characters (X, Z) often appear at the end</li>
+          <li>Try common key lengths: 3, 4, 5, 6, 7</li>
+          <li>Double transposition (doing it twice) was used in WWII</li>
+        </ul>
+      </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='Styling/menuBar.js') }}"></script>
+  </body>
+</html>

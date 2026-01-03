@@ -1,0 +1,231 @@
+/* Dashboard page styling */
+.dashboard-container {
+    flex: 1;
+    padding: 40px 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.dashboard-header {
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    margin-bottom: 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.dashboard-header h1 {
+    color: #800000;
+    margin: 0;
+    font-size: 2rem;
+}
+
+.dashboard-header .welcome {
+    color: #333;
+    font-size: 1.1rem;
+}
+
+.dashboard-header .logout-btn {
+    background-color: #800000;
+    color: #ffffff;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background-color 200ms ease, transform 100ms ease;
+}
+
+.dashboard-header .logout-btn:hover {
+    background-color: #600000;
+    transform: translateY(-2px);
+}
+
+.dashboard-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 24px;
+}
+
+.dashboard-card {
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    padding: 24px;
+}
+
+.dashboard-card h2 {
+    color: #800000;
+    margin-top: 0;
+    margin-bottom: 16px;
+    font-size: 1.4rem;
+}
+
+.dashboard-card p {
+    color: #666;
+    line-height: 1.6;
+}
+
+.dashboard-card a {
+    display: inline-block;
+    color: #800000;
+    text-decoration: none;
+    font-weight: 600;
+    margin-top: 12px;
+}
+
+.dashboard-card a:hover {
+    text-decoration: underline;
+}
+
+/* Stats row */
+.stats-row {
+    margin-top: 24px;
+}
+
+.stat-card {
+    text-align: center;
+    padding: 30px 24px;
+}
+
+.stat-icon {
+    font-size: 2.5rem;
+    margin-bottom: 12px;
+}
+
+.stat-value {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #800000;
+    margin-bottom: 8px;
+}
+
+.stat-label {
+    font-size: 1rem;
+    color: #666;
+    font-weight: 600;
+}
+
+.stat-detail {
+    font-size: 0.85rem;
+    color: #999;
+    margin-top: 4px;
+}
+
+/* Completed challenges section */
+.dashboard-section {
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    padding: 24px;
+    margin-top: 24px;
+}
+
+.dashboard-section h2 {
+    color: #800000;
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-size: 1.4rem;
+}
+
+/* Challenge progress list - two column grid */
+.challenge-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: repeat(8, auto);
+    gap: 12px;
+    grid-auto-flow: column;
+}
+
+@media (max-width: 768px) {
+    .challenge-list {
+        grid-template-columns: 1fr;
+        grid-auto-flow: row;
+    }
+}
+
+.challenge-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    border-radius: 8px;
+    transition: transform 0.2s ease;
+}
+
+.challenge-item:hover {
+    transform: translateX(4px);
+}
+
+/* Completed challenges - green */
+.challenge-item.completed {
+    background-color: #e8f5e9;
+    border-left: 4px solid #4caf50;
+}
+
+.challenge-item.completed .challenge-status {
+    color: #4caf50;
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+.challenge-item.completed .challenge-points {
+    background-color: #4caf50;
+    color: white;
+}
+
+/* Active (published) but incomplete - red */
+.challenge-item.active {
+    background-color: #ffebee;
+    border-left: 4px solid #e53935;
+}
+
+.challenge-item.active .challenge-status {
+    color: #e53935;
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+.challenge-item.active .challenge-points {
+    background-color: #e53935;
+    color: white;
+}
+
+/* Inactive (unpublished) - blue */
+.challenge-item.inactive {
+    background-color: #e3f2fd;
+    border-left: 4px solid #1976d2;
+}
+
+.challenge-item.inactive .challenge-status {
+    color: #1976d2;
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+.challenge-item.inactive .challenge-points {
+    background-color: #1976d2;
+    color: white;
+}
+
+.challenge-title {
+    flex: 1;
+    font-weight: 500;
+    color: #333;
+}
+
+.challenge-points {
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}

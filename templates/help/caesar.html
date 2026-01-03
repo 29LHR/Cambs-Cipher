@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="{{ url_for('static', filename='logo.png') }}" />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='Styling/base.css') }}"
+    />
+    <title>Caesar Cipher - The Cambridge Cipher</title>
+    <style>
+      .help-container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 40px 20px;
+      }
+      .help-card {
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        padding: 40px;
+        margin-bottom: 24px;
+      }
+      .help-card h1 {
+        color: #800000;
+        margin-top: 0;
+      }
+      .help-card h2 {
+        color: #800000;
+        border-bottom: 2px solid #800000;
+        padding-bottom: 8px;
+      }
+      .example-box {
+        background: #f5f5f5;
+        border-left: 4px solid #800000;
+        padding: 16px 20px;
+        margin: 16px 0;
+        font-family: monospace;
+        font-size: 1.1rem;
+      }
+      .alphabet-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 16px 0;
+        font-family: monospace;
+      }
+      .alphabet-table td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: center;
+      }
+      .alphabet-table tr:first-child {
+        background: #800000;
+        color: white;
+      }
+      .back-link {
+        display: inline-block;
+        color: #800000;
+        text-decoration: none;
+        font-weight: 600;
+        margin-bottom: 20px;
+      }
+      .back-link:hover {
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <button
+        class="menu-toggle"
+        aria-controls="primary-nav"
+        aria-expanded="false"
+        aria-label="Toggle menu"
+      >
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </button>
+      <nav id="primary-nav" class="nav">
+        <a href="/">Home</a>
+        <a href="/challenges">Challenges</a>
+        <a href="/leaderboard">Leaderboard</a>
+        <a href="/dashboard">Dashboard</a>
+      </nav>
+      <a class="brand" href="/">The Cambridge Cipher</a>
+    </div>
+
+    <div class="help-container">
+      <a href="/" class="back-link">← Back to Home</a>
+
+      <div class="help-card">
+        <h1>🔐 The Caesar Cipher</h1>
+        <p>
+          The Caesar Cipher is one of the oldest and simplest encryption
+          techniques, named after Julius Caesar who used it to communicate with
+          his generals.
+        </p>
+
+        <h2>How It Works</h2>
+        <p>
+          Each letter in the plaintext is shifted a fixed number of positions
+          down the alphabet. For example, with a shift of 3:
+        </p>
+        <ul>
+          <li>A becomes D</li>
+          <li>B becomes E</li>
+          <li>C becomes F</li>
+          <li>...and so on</li>
+        </ul>
+
+        <h2>Example</h2>
+        <p><strong>Plaintext:</strong> HELLO</p>
+        <p><strong>Shift:</strong> 3</p>
+        <div class="example-box">
+          H → K<br />
+          E → H<br />
+          L → O<br />
+          L → O<br />
+          O → R<br /><br />
+          <strong>Ciphertext: KHOOR</strong>
+        </div>
+
+        <h2>The Cipher Alphabet (Shift of 3)</h2>
+        <table class="alphabet-table">
+          <tr>
+            <td>Plain</td>
+            <td>A</td>
+            <td>B</td>
+            <td>C</td>
+            <td>D</td>
+            <td>E</td>
+            <td>F</td>
+            <td>G</td>
+            <td>H</td>
+            <td>I</td>
+            <td>J</td>
+            <td>K</td>
+            <td>L</td>
+            <td>M</td>
+          </tr>
+          <tr>
+            <td>Cipher</td>
+            <td>D</td>
+            <td>E</td>
+            <td>F</td>
+            <td>G</td>
+            <td>H</td>
+            <td>I</td>
+            <td>J</td>
+            <td>K</td>
+            <td>L</td>
+            <td>M</td>
+            <td>N</td>
+            <td>O</td>
+            <td>P</td>
+          </tr>
+        </table>
+        <table class="alphabet-table">
+          <tr>
+            <td>Plain</td>
+            <td>N</td>
+            <td>O</td>
+            <td>P</td>
+            <td>Q</td>
+            <td>R</td>
+            <td>S</td>
+            <td>T</td>
+            <td>U</td>
+            <td>V</td>
+            <td>W</td>
+            <td>X</td>
+            <td>Y</td>
+            <td>Z</td>
+          </tr>
+          <tr>
+            <td>Cipher</td>
+            <td>Q</td>
+            <td>R</td>
+            <td>S</td>
+            <td>T</td>
+            <td>U</td>
+            <td>V</td>
+            <td>W</td>
+            <td>X</td>
+            <td>Y</td>
+            <td>Z</td>
+            <td>A</td>
+            <td>B</td>
+            <td>C</td>
+          </tr>
+        </table>
+
+        <h2>How to Crack It</h2>
+        <ol>
+          <li>
+            <strong>Brute Force:</strong> There are only 25 possible shifts, so
+            try them all!
+          </li>
+          <li>
+            <strong>Frequency Analysis:</strong> In English, 'E' is the most
+            common letter. Find the most frequent letter in the ciphertext and
+            assume it's 'E'.
+          </li>
+          <li>
+            <strong>Pattern Recognition:</strong> Single-letter words are
+            usually 'A' or 'I'. Common three-letter words include 'THE', 'AND',
+            'FOR'.
+          </li>
+        </ol>
+
+        <h2>Tips</h2>
+        <ul>
+          <li>ROT13 is a special Caesar cipher with a shift of 13</li>
+          <li>The shift can go in either direction (left or right)</li>
+          <li>Numbers and punctuation are usually left unchanged</li>
+        </ul>
+      </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='Styling/menuBar.js') }}"></script>
+  </body>
+</html>

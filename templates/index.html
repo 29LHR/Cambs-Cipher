@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="{{ url_for('static', filename='logo.png') }}" />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='Styling/index.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='Styling/base.css') }}"
+    />
+    <title>The Cambridge Cipher</title>
+  </head>
+  <body>
+    <div class="header">
+      <button
+        class="menu-toggle"
+        aria-controls="primary-nav"
+        aria-expanded="false"
+        aria-label="Toggle menu"
+      >
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </button>
+
+      <nav id="primary-nav" class="nav">
+        <a href="/">Home</a>
+        <a href="/challenges">Challenges</a>
+        <a href="/leaderboard">Leaderboard</a>
+        <a href="/dashboard">Dashboard</a>
+      </nav>
+      <a class="brand" href="/" aria-current="page">The Cambridge Cipher</a>
+    </div>
+    <div class="hero">
+      <div class="main">
+        <div class="main-inner">
+          <div class="main-copy">
+            <h1>Welcome to The Cambridge Cipher!</h1>
+            <p>
+              Dive into the world of ciphers and codes with our exciting
+              challenges. Test your skills, climb the leaderboard, and become a
+              master cryptographer!
+            </p>
+          </div>
+          <div class="main-logo" aria-label="The Cambridge Cipher logo">
+            <img
+              src="{{ url_for('static', filename='logo.png') }}"
+              alt="The Cambridge Cipher logo"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row2">
+      <div class="files">
+        <h2>Getting Started</h2>
+        <p>Learn about these ciphers to help solve the challenges:</p>
+        <ul>
+          <li>
+            <a href="/help/caesar">The Caesar Cipher</a>
+          </li>
+          <li>
+            <a href="/help/vigenere">The Vigenère Cipher</a>
+          </li>
+          <li>
+            <a href="/help/substitution">The Substitution Cipher</a>
+          </li>
+          <li>
+            <a href="/help/playfair">The Playfair Cipher</a>
+          </li>
+          <li>
+            <a href="/help/transposition">The Transposition Cipher</a>
+          </li>
+          <li>
+            <p>Other ciphers may be used in challenges btw :)</p>
+          </li>
+        </ul>
+      </div>
+      <div class="register">
+        <h2>Register Now!</h2>
+        <p>
+          <br />
+          Don't miss out on the fun! <a href="/profile">Register here</a> to
+          start solving challenges and climbing the leaderboard.
+          <br /><br /><br /><br />
+          <b>Teachers:</b> To register multiple teams for you school please
+          email us the details (Team Name, Representative Email, Team Password)
+          at
+          <a href="mailto:teams@cambridgecipher.com"
+            >teams@cambridgecipher.com</a
+          >
+          and we will set up the accounts for you.
+        </p>
+      </div>
+    </div>
+    <div class="footer">The Cambridge Cipher &copy; 2025</div>
+
+    <script src="{{ url_for('static', filename='Styling/menuBar.js') }}"></script>
+  </body>
+</html>

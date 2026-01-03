@@ -1,0 +1,156 @@
+/* Page background and base text color aligned with the theme */
+body {
+	background: #f7f3ef;
+	color: #1e1a1a;
+}
+
+/* Layout: place sidebar and main content side by side on desktop */
+.challengesList {
+	display: block;
+	width: auto;
+	background: #8f2222; /* deep maroon accent */
+	color: #ffffff;
+	padding: 16px 14px;
+	box-sizing: border-box;
+	box-shadow: 0 4px 20px rgba(0, 0, 0, 0.18);
+	border-radius: 12px;
+	margin: 0; /* inside row2, margins handled by container */
+	text-align: center;
+}
+
+.challengesList h2 {
+	margin: 0 0 12px 0;
+	font-weight: 700;
+	letter-spacing: 0.3px;
+}
+
+/* Two-column layout for challenges */
+.challengesList > div {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	grid-template-rows: repeat(8, auto);
+	gap: 8px;
+	grid-auto-flow: column; /* fill columns top-to-bottom */
+}
+
+.challengesList a {
+	display: block;
+	color: #ffffff;
+	text-decoration: none;
+	text-align: center;
+	padding: 10px 12px;
+	border-radius: 8px;
+	margin-bottom: 0;
+	background: rgba(255, 255, 255, 0.08);
+	transition: background 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+	cursor: pointer;
+}
+
+.challengesList a:hover,
+.challengesList a:focus {
+	background: rgba(255, 255, 255, 0.16);
+	box-shadow: 0 6px 16px rgba(0, 0, 0, 0.22);
+	transform: translateY(-1px);
+}
+
+.main {
+	display: block;
+	width: auto;
+	padding: 20px;
+	margin: 12px 16px;
+	box-sizing: border-box;
+	background: #ffffff;
+	border-radius: 12px;
+	box-shadow: 0 8px 28px rgba(0, 0, 0, 0.16);
+}
+/* Row 2: place rules and list side by side */
+.row2 {
+	max-width: 960px;
+	margin: 16px auto;
+	padding: 20px;
+	box-sizing: border-box;
+	display: flex;
+	gap: 20px;
+	align-items: flex-start; /* let each card size to its content */
+}
+
+.challengesList,
+.Rules {
+	flex: 1 1 0;
+	min-width: 0;
+}
+
+/* Rules: match styling to challengesList */
+.Rules {
+	background: #8f2222;
+	color: #ffffff;
+	padding: 16px 14px;
+	box-sizing: border-box;
+	box-shadow: 0 4px 20px rgba(0, 0, 0, 0.18);
+	border-radius: 12px;
+	text-align: center;
+}
+
+.Rules h2 {
+	margin-top: 0;
+	margin-bottom: 10px;
+	color: #ffffff;
+}
+
+.Rules ul {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+.Rules li {
+	margin-bottom: 8px;
+	background: rgba(255, 255, 255, 0.08);
+	padding: 10px 12px;
+	border-radius: 8px;
+}
+
+
+.main h1 {
+	margin-top: 0;
+	margin-bottom: 12px;
+	color: #8f2222;
+	letter-spacing: 0.4px;
+}
+
+.main p {
+	line-height: 1.6;
+	margin: 0;
+}
+
+/* Responsive: stack sidebar and main on small screens */
+@media (max-width: 800px) {
+	.challengesList,
+	.main {
+		display: block;
+		width: auto;
+		margin: 12px 16px;
+	}
+
+	.main { margin-top: 16px; }
+
+	.row2 {
+		flex-direction: column;
+		margin: 12px 16px;
+		padding: 0;
+		gap: 12px;
+	}
+}
+
+/* Desktop: mirror mobile stacking but centered and wider */
+@media (min-width: 801px) {
+	body {
+		display: block;
+	}
+	.main {
+		max-width: 960px;
+		width: calc(100% - 48px);
+		margin: 16px auto;
+		margin-top: 16px;
+	}
+}

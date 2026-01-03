@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="{{ url_for('static', filename='logo.png') }}" />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='Styling/base.css') }}"
+    />
+    <title>Challenge Not Available - The Cambridge Cipher</title>
+    <style>
+      .not-published-container {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 40px 20px;
+      }
+
+      .not-published-box {
+        background-color: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        padding: 60px 40px;
+        max-width: 500px;
+        text-align: center;
+      }
+
+      .not-published-icon {
+        font-size: 4rem;
+        margin-bottom: 20px;
+      }
+
+      .not-published-box h1 {
+        color: #800000;
+        margin-bottom: 16px;
+        font-size: 1.8rem;
+      }
+
+      .not-published-box p {
+        color: #666;
+        line-height: 1.6;
+        margin-bottom: 24px;
+      }
+
+      .back-btn {
+        display: inline-block;
+        background-color: #800000;
+        color: #ffffff;
+        text-decoration: none;
+        padding: 12px 24px;
+        border-radius: 8px;
+        font-weight: 600;
+        transition: background-color 200ms ease, transform 100ms ease;
+      }
+
+      .back-btn:hover {
+        background-color: #600000;
+        transform: translateY(-2px);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <button
+        class="menu-toggle"
+        aria-controls="primary-nav"
+        aria-expanded="false"
+        aria-label="Toggle menu"
+      >
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </button>
+
+      <nav id="primary-nav" class="nav">
+        <a href="/">Home</a>
+        <a href="/challenges">Challenges</a>
+        <a href="/leaderboard">Leaderboard</a>
+        <a href="/dashboard">Dashboard</a>
+      </nav>
+      <a class="brand" href="/">The Cambridge Cipher</a>
+    </div>
+
+    <div class="not-published-container">
+      <div class="not-published-box">
+        <div class="not-published-icon">🔒</div>
+        <h1>Challenge Not Available</h1>
+        <p>
+          {% if message %} {{ message }} {% else %} This challenge hasn't been
+          published yet. Check back later or explore the other challenges that
+          are currently available! {% endif %}
+        </p>
+        <a href="/challenges" class="back-btn">← Back to Challenges</a>
+      </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='Styling/menuBar.js') }}"></script>
+  </body>
+</html>

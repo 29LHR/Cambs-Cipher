@@ -1,0 +1,212 @@
+/* Page background and text */
+body {
+	background: #f7f3ef;
+	color: #1e1a1a;
+}
+
+/* Main content: light card */
+.main {
+	max-width: 960px;
+	margin: 16px auto;
+	padding: 20px;
+	box-sizing: border-box;
+	background: #ffffff;
+	color: #1e1a1a;
+	border-radius: 12px;
+	box-shadow: 0 8px 28px rgba(0, 0, 0, 0.16);
+}
+
+.main h1 {
+    margin-top: 0;
+    margin-bottom: 12px;
+    color: #8f2222;
+}
+
+/* Main inner layout: text + logo side-by-side */
+.main-inner {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 20px;
+}
+
+.main-copy {
+	flex: 1 1 auto;
+}
+
+.main-logo {
+	flex: 0 0 260px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.main-logo img {
+	max-width: 100%;
+	height: auto;
+	display: block;
+	border-radius: 10px; /* soften image corners inside card */
+}
+
+/* Hero: main card with right logo */
+.hero {
+	max-width: 1100px;
+	margin: 16px auto;
+	box-sizing: border-box;
+	display: flex;
+	gap: 20px;
+	align-items: stretch;
+	padding: 0 0; /* keep outer spacing consistent */
+}
+
+.hero .main {
+	margin: 0; /* override .main's centered margin when inside hero */
+	flex: 1;
+}
+
+.logo-card {
+	flex: 0 0 280px;
+	background: #ffffff;
+	color: #1e1a1a;
+	border-radius: 12px;
+	box-shadow: 0 8px 28px rgba(0, 0, 0, 0.16);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 16px;
+}
+
+.logo-card img {
+	max-width: 100%;
+	height: auto;
+	display: block;
+}
+
+/* Tips section: inverted colors like challenges sidebar */
+.files {
+	max-width: 960px;
+	margin: 16px auto;
+	padding: 20px;
+	box-sizing: border-box;
+	background: #8f2222; /* deep maroon */
+	color: #ffffff;
+	border-radius: 12px;
+	box-shadow: 0 8px 28px rgba(0, 0, 0, 0.18);
+    text-align: center;
+}
+
+.files h2 {
+	margin-top: 0;
+	margin-bottom: 10px;
+	color: #ffffff;
+}
+
+.files p {
+	margin-top: 0;
+	margin-bottom: 10px;
+	color: #f7f3ef;
+}
+
+.files ul {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+.files li {
+	margin-bottom: 8px;
+}
+
+
+.files a {
+	color: #ffffff;
+	text-decoration: none;
+	font-weight: 600;
+	background: rgba(255, 255, 255, 0.14);
+	padding: 8px 12px;
+	border-radius: 8px;
+	display: inline-block;
+	transition: background 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+}
+
+.files a:hover,
+.files a:focus {
+	background: rgba(255, 255, 255, 0.22);
+	box-shadow: 0 6px 16px rgba(0, 0, 0, 0.22);
+	transform: translateY(-1px);
+}
+
+/* Row 2 container */
+.row2 {
+	max-width: 960px;
+	margin: 16px auto;
+	padding: 20px;
+	box-sizing: border-box;
+	display: flex;
+	gap: 20px;
+}
+
+/* Register section: same styling as files */
+.register {
+	flex: 1;
+	padding: 20px;
+	box-sizing: border-box;
+	background: #8f2222; /* deep maroon */
+	color: #ffffff;
+	border-radius: 12px;
+	box-shadow: 0 8px 28px rgba(0, 0, 0, 0.18);
+	text-align: center;
+}
+
+.register h2 {
+	margin-top: 0;
+	margin-bottom: 10px;
+	color: #ffffff;
+}
+
+.register p {
+	margin-top: 0;
+	margin-bottom: 10px;
+	color: #f7f3ef;
+}
+
+.register a {
+	color: #ffffff;
+	text-decoration: none;
+	font-weight: 600;
+	background: rgba(255, 255, 255, 0.14);
+	padding: 8px 12px;
+	border-radius: 8px;
+	display: inline-block;
+	transition: background 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+}
+
+.register a:hover,
+.register a:focus {
+	background: rgba(255, 255, 255, 0.22);
+	box-shadow: 0 6px 16px rgba(0, 0, 0, 0.22);
+	transform: translateY(-1px);
+}
+
+/* Make files card flexible */
+.files {
+	flex: 1;
+	margin: 0;
+}
+
+/* Breathing room below the header on mobile */
+@media (max-width: 640px) {
+	.main { margin: 12px 16px; }
+	.main-inner { flex-direction: column; }
+	.main-logo { flex: 0 0 auto; width: 100%; }
+	
+	.row2 {
+		flex-direction: column;
+		margin: 12px 16px;
+	}
+	
+	.files,
+	.register {
+		margin: 0;
+	}
+}

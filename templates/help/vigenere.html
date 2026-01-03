@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="{{ url_for('static', filename='logo.png') }}" />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='Styling/base.css') }}"
+    />
+    <title>Vigenère Cipher - The Cambridge Cipher</title>
+    <style>
+      .help-container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 40px 20px;
+      }
+      .help-card {
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        padding: 40px;
+        margin-bottom: 24px;
+      }
+      .help-card h1 {
+        color: #800000;
+        margin-top: 0;
+      }
+      .help-card h2 {
+        color: #800000;
+        border-bottom: 2px solid #800000;
+        padding-bottom: 8px;
+      }
+      .example-box {
+        background: #f5f5f5;
+        border-left: 4px solid #800000;
+        padding: 16px 20px;
+        margin: 16px 0;
+        font-family: monospace;
+        font-size: 1.1rem;
+        overflow-x: auto;
+      }
+      .back-link {
+        display: inline-block;
+        color: #800000;
+        text-decoration: none;
+        font-weight: 600;
+        margin-bottom: 20px;
+      }
+      .back-link:hover {
+        text-decoration: underline;
+      }
+      .vigenere-table {
+        font-family: monospace;
+        font-size: 0.75rem;
+        border-collapse: collapse;
+        margin: 16px 0;
+      }
+      .vigenere-table td,
+      .vigenere-table th {
+        border: 1px solid #ddd;
+        padding: 4px 6px;
+        text-align: center;
+      }
+      .vigenere-table th {
+        background: #800000;
+        color: white;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <button
+        class="menu-toggle"
+        aria-controls="primary-nav"
+        aria-expanded="false"
+        aria-label="Toggle menu"
+      >
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </button>
+      <nav id="primary-nav" class="nav">
+        <a href="/">Home</a>
+        <a href="/challenges">Challenges</a>
+        <a href="/leaderboard">Leaderboard</a>
+        <a href="/dashboard">Dashboard</a>
+      </nav>
+      <a class="brand" href="/">The Cambridge Cipher</a>
+    </div>
+
+    <div class="help-container">
+      <a href="/" class="back-link">← Back to Home</a>
+
+      <div class="help-card">
+        <h1>🔐 The Vigenère Cipher</h1>
+        <p>
+          The Vigenère Cipher is a polyalphabetic substitution cipher that uses
+          a keyword to encrypt text. It was considered unbreakable for over 300
+          years!
+        </p>
+
+        <h2>How It Works</h2>
+        <p>
+          Unlike the Caesar cipher which uses a single shift, the Vigenère
+          cipher uses a keyword where each letter determines a different shift:
+        </p>
+        <ul>
+          <li>A = shift 0, B = shift 1, C = shift 2, ... Z = shift 25</li>
+          <li>The keyword is repeated to match the length of the plaintext</li>
+          <li>
+            Each plaintext letter is shifted by its corresponding keyword letter
+          </li>
+        </ul>
+
+        <h2>Example</h2>
+        <p><strong>Plaintext:</strong> ATTACKATDAWN</p>
+        <p><strong>Keyword:</strong> LEMON</p>
+        <div class="example-box">
+          Plaintext: A T T A C K A T D A W N Keyword: L E M O N L E M O N L E
+          Shifts: 11 4 12 14 13 11 4 12 14 13 11 4 Ciphertext: L X F O P V E F R
+          N H R
+
+          <strong>Result: LXFOPVEFRNHR</strong>
+        </div>
+
+        <h2>Encryption Formula</h2>
+        <div class="example-box">
+          Ciphertext = (Plaintext + Key) mod 26 Example: A (0) + L (11) = L (11)
+          T (19) + E (4) = X (23)
+        </div>
+
+        <h2>How to Crack It</h2>
+        <ol>
+          <li>
+            <strong>Find the Key Length:</strong> Use the Kasiski examination or
+            Index of Coincidence to find repeating patterns
+          </li>
+          <li>
+            <strong>Split into Groups:</strong> Once you know the key length,
+            split the ciphertext into groups
+          </li>
+          <li>
+            <strong>Frequency Analysis:</strong> Each group is essentially a
+            Caesar cipher - use frequency analysis on each
+          </li>
+          <li>
+            <strong>Combine:</strong> Put the individual Caesar shifts together
+            to find the keyword
+          </li>
+        </ol>
+
+        <h2>Kasiski Examination</h2>
+        <p>
+          Look for repeated sequences in the ciphertext. The distance between
+          repetitions is likely a multiple of the key length.
+        </p>
+
+        <h2>Tips</h2>
+        <ul>
+          <li>Longer keywords are harder to crack</li>
+          <li>
+            If the keyword is as long as the message and random, it becomes a
+            One-Time Pad (unbreakable!)
+          </li>
+          <li>Common words like "THE" can help identify key length</li>
+          <li>Online tools can help calculate the Index of Coincidence</li>
+        </ul>
+      </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='Styling/menuBar.js') }}"></script>
+  </body>
+</html>

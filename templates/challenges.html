@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="{{ url_for('static', filename='logo.png') }}" />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='Styling/challenges.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='Styling/base.css') }}"
+    />
+    <title>The Cambridge Cipher</title>
+  </head>
+  <body>
+    <div class="header">
+      <button
+        class="menu-toggle"
+        aria-controls="primary-nav"
+        aria-expanded="false"
+        aria-label="Toggle menu"
+      >
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </button>
+
+      <nav id="primary-nav" class="nav">
+        <a href="/">Home</a>
+        <a href="/challenges">Challenges</a>
+        <a href="/leaderboard">Leaderboard</a>
+        <a href="/dashboard">Dashboard</a>
+      </nav>
+      <a class="brand" href="/" aria-current="page">The Cambridge Cipher</a>
+    </div>
+
+    <div class="parts">
+      <div class="main">
+        <h1>The Challenges</h1>
+        <p>
+          Welcome to the Challenges page! Here you'll find each of the cipher
+          challenges to test your skills. Stay tuned for updates as we add more
+          challenges each week!
+        </p>
+      </div>
+      <div class="row2">
+        <div class="challengesList">
+          <h2>Challenges List</h2>
+          <div>
+            <a href="/challenge/0">Introduction</a>
+            <a href="/challenge/1">Challenge 1 (Practice)</a>
+            <a href="/challenge/2">Challenge 2 (Practice)</a>
+            <a href="/challenge/3">Challenge 3 (Practice)</a>
+            <a href="/challenge/4">Challenge 4</a>
+            <a href="/challenge/5">Challenge 5</a>
+            <a href="/challenge/6">Challenge 6</a>
+            <a href="/challenge/7">Challenge 7</a>
+            <a href="/challenge/8">Challenge 8</a>
+            <a href="/challenge/9">Challenge 9</a>
+            <a href="/challenge/10">Challenge 10</a>
+            <a href="/challenge/11">Challenge 11</a>
+            <a href="/challenge/12">Challenge 12</a>
+            <a href="/challenge/13">Challenge 13</a>
+            <a href="/challenge/14">Challenge 14</a>
+            <a href="/challenge/15">Challenge 15</a>
+          </div>
+        </div>
+        <div class="Rules">
+          <h2>Challenge Rules</h2>
+          <ul>
+            <li>1. Enjoy Yourselves!</li>
+            <li>All submissions must be your own work.</li>
+            <li>Please do not post any hints or solutions online</li>
+            <li>
+              Please don't share solutions with other teams (you are competing
+              against them!)
+            </li>
+            <li>Please only submit the answers nothing else</li>
+            <li>
+              Leave any padding charaters or mistakes (from the plaintext) in
+              your answers if applicable
+            </li>
+            <li>Answers are not case-sensitive and punctuation will be ignored</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer">The Cambridge Cipher &copy; 2025</div>
+
+    <script>
+      (function () {
+        const btn = document.querySelector(".menu-toggle");
+        const nav = document.getElementById("primary-nav");
+        if (!btn || !nav) return;
+
+        const closeMenu = () => {
+          btn.setAttribute("aria-expanded", "false");
+          nav.classList.remove("open");
+        };
+
+        const openMenu = () => {
+          btn.setAttribute("aria-expanded", "true");
+          nav.classList.add("open");
+        };
+
+        btn.addEventListener("click", () => {
+          const expanded = btn.getAttribute("aria-expanded") === "true";
+          if (expanded) {
+            closeMenu();
+          } else {
+            openMenu();
+          }
+        });
+
+        // Close the menu when a link is clicked (useful on mobile)
+        nav.addEventListener("click", (e) => {
+          const target = e.target;
+          if (target && target.tagName === "A") {
+            closeMenu();
+          }
+        });
+
+        // Close on Escape key
+        document.addEventListener("keydown", (e) => {
+          if (e.key === "Escape") closeMenu();
+        });
+      })();
+    </script>
+  </body>
+</html>
