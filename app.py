@@ -6,6 +6,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.middleware.proxy_fix import ProxyFix
 from forms import LoginForm, SignUpForm, ForgotPasswordForm, ResetPasswordForm, ProfileForm, AnswerForm, DeleteAccountForm
 from datetime import datetime
+import logging
 import os
 import secrets
 
@@ -143,6 +144,8 @@ def calculate_points(base_points, time_seconds):
 # Create database
 with app.app_context():
     db.create_all()
+    # Configure basic logging to stderr for Render logs
+    logging.basicConfig(level=logging.INFO)
     
 @login_manager.user_loader
 def load_user(user_id):
@@ -417,8 +420,14 @@ def register():
         new_user.firstName = form.firstName.data
         new_user.lastName = form.lastName.data
         new_user.school = form.school.data
-        db.session.add(new_user)
-        db.session.commit()
+        try:
+            db.session.add(new_user)
+            db.session.commit()
+        except Exception as e:
+            db.session.rollback()
+            logging.exception("Error creating new user")
+            flash("An error occurred while creating your account. Please try again later.", "error")
+            return render_template("auth/signUp.html", form=form)
 
         flash("Account created successfully! Please login.", "success")
         return redirect(url_for("login"))
