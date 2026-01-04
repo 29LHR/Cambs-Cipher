@@ -4,4 +4,3 @@ flask_login
 flask_wtf
 werkzeug
 gunicorn
-psycopg2-binary

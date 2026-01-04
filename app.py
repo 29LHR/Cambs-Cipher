@@ -14,29 +14,10 @@ app = Flask(__name__)
 # Fix for running behind a reverse proxy (Tailscale, nginx, Render, etc.)
 app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_prefix=1)
 
-# Database: prefer DATABASE_URL / SQLALCHEMY_DATABASE_URI (e.g. postgres on Render).
-# If not provided, compose a Postgres URL from common PG env vars for local dev
-# Fallback database name is 'cambs_cipher'. This makes Postgres the default instead
-# of sqlite. If a password is present we'll include it in the URL; otherwise use
-# a no-password form (useful for local setups).
-database_url = os.environ.get('DATABASE_URL') or os.environ.get('SQLALCHEMY_DATABASE_URI')
-if not database_url:
-    pg_user = os.environ.get('PGUSER') or os.environ.get('POSTGRES_USER') or 'postgres'
-    pg_password = os.environ.get('PGPASSWORD') or os.environ.get('POSTGRES_PASSWORD') or ''
-    pg_host = os.environ.get('PGHOST') or os.environ.get('POSTGRES_HOST') or 'localhost'
-    pg_port = os.environ.get('PGPORT') or os.environ.get('POSTGRES_PORT') or '5432'
-    pg_db = os.environ.get('PGDATABASE') or os.environ.get('POSTGRES_DB') or 'cambs_cipher'
-    if pg_password:
-        # Use psycopg2 driver when composing local Postgres URL
-        database_url = f'postgresql+psycopg2://{pg_user}:{pg_password}@{pg_host}:{pg_port}/{pg_db}'
-    else:
-        database_url = f'postgresql+psycopg2://{pg_user}@{pg_host}:{pg_port}/{pg_db}'
-
-# Normalize common DATABASE_URL formats (Render provides `postgres://...`).
-# SQLAlchemy requires the `postgresql+psycopg2://` scheme when using psycopg2.
-if isinstance(database_url, str) and database_url.startswith('postgres://'):
-    database_url = database_url.replace('postgres://', 'postgresql+psycopg2://', 1)
-
+# Database: use `DATABASE_URL` / `SQLALCHEMY_DATABASE_URI` when provided,
+# otherwise fall back to a local SQLite file for simplicity and easy Render
+# deployment without needing a managed Postgres DB.
+database_url = os.environ.get('DATABASE_URL') or os.environ.get('SQLALCHEMY_DATABASE_URI') or 'sqlite:///db.sqlite'
 app.config['SQLALCHEMY_DATABASE_URI'] = database_url
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
