@@ -18,7 +18,7 @@ pip install -r requirements.txt
 python3 app.py
 ```
 
-By default the app binds to `0.0.0.0:5500` (see `FLASK_PORT` / `FLASK_BIND` env vars).
+By default the app binds to `127.0.0.1:5500` (see `FLASK_PORT` / `FLASK_BIND` env vars).
 
 Notes about the current simplified configuration
 
