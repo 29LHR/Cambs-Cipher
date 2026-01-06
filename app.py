@@ -1,7 +1,6 @@
 from flask import Flask, render_template, request, url_for, redirect, flash, session
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
-from flask_wtf.csrf import CSRFProtect
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.middleware.proxy_fix import ProxyFix
 from forms import LoginForm, SignUpForm, ForgotPasswordForm, ResetPasswordForm, ProfileForm, AnswerForm, DeleteAccountForm
@@ -28,29 +27,17 @@ app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY') or secrets.token_hex(32)
 # Determine environment (Render sets PORT); treat presence of PORT as production
 is_prod = bool(os.environ.get('PORT') or os.environ.get('FLASK_ENV') == 'production' or os.environ.get('RENDER'))
 
-# Cookie and CSRF settings
-app.config['SESSION_COOKIE_SECURE'] = os.environ.get('SESSION_COOKIE_SECURE', '1' if is_prod else '0') == '1'
+# Simplified cookie and CSRF settings for basic local development
+app.config['SESSION_COOKIE_SECURE'] = False
 app.config['SESSION_COOKIE_HTTPONLY'] = True
 app.config['SESSION_COOKIE_SAMESITE'] = os.environ.get('SESSION_COOKIE_SAMESITE', 'Lax')
-app.config['WTF_CSRF_ENABLED'] = True
-app.config['WTF_CSRF_TIME_LIMIT'] = int(os.environ.get('WTF_CSRF_TIME_LIMIT', '3600'))  # seconds
-app.config['PREFERRED_URL_SCHEME'] = 'https' if is_prod else os.environ.get('PREFERRED_URL_SCHEME', 'http')
+app.config['WTF_CSRF_ENABLED'] = False
+app.config['PREFERRED_URL_SCHEME'] = 'http'
 
 db = SQLAlchemy(app)
-csrf = CSRFProtect(app)
 login_manager = LoginManager(app)
 login_manager.login_view = "login" # type: ignore
 login_manager.session_protection = "strong"
-
-# Add security headers to all responses
-@app.after_request
-def add_security_headers(response):
-    response.headers['X-Content-Type-Options'] = 'nosniff'
-    response.headers['X-Frame-Options'] = 'SAMEORIGIN'
-    response.headers['X-XSS-Protection'] = '1; mode=block'
-    response.headers['Strict-Transport-Security'] = 'max-age=31536000; includeSubDomains'
-    response.headers['Content-Security-Policy'] = "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; upgrade-insecure-requests"
-    return response
 
 class Users(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -527,34 +514,12 @@ def reset_password():
     return render_template("auth/resetPassword.html", form=form, username=user.username)
 
 if __name__ == '__main__':
-    # Runtime configuration for local / Tailscale development:
-    # - Set DEV_ALLOW_HTTP=1 to run without SSL (useful for local or Tailscale)
-    # - Set SSL_CERT and SSL_KEY to point to certificate files when using HTTPS
-    # - Set FLASK_HOST / FLASK_PORT / FLASK_DEBUG to override defaults
+    # Simplified runtime for basic HTTP development
     host = os.environ.get('FLASK_HOST', '127.0.0.1')
     port = int(os.environ.get('FLASK_PORT', '5500'))
     debug = os.environ.get('FLASK_DEBUG', '1') == '1'
+    bind_host = os.environ.get('FLASK_BIND', '127.0.0.1')
 
-    ssl_cert = os.environ.get('SSL_CERT') or 'lr.tail24ded.ts.net.crt'
-    ssl_key = os.environ.get('SSL_KEY') or 'lr.tail24ded.ts.net.key'
-
-    # If DEV_ALLOW_HTTP=1 -> run without SSL and bind to 0.0.0.0 (for Tailscale)
-    allow_http = os.environ.get('DEV_ALLOW_HTTP', '0') == '1'
-
-    use_ssl = False
-    if not allow_http and os.path.exists(ssl_cert) and os.path.exists(ssl_key):
-        use_ssl = True
-
-    if use_ssl:
-        app.run(host=host, debug=debug, port=port, ssl_context=(ssl_cert, ssl_key))
-    else:
-        if allow_http:
-            # Allow insecure cookies for local HTTP development
-            app.config['SESSION_COOKIE_SECURE'] = False
-            bind_host = os.environ.get('FLASK_BIND', '0.0.0.0')
-            print(f"Running without SSL on http://{bind_host}:{port} (DEV_ALLOW_HTTP=1)")
-            app.run(host=bind_host, debug=debug, port=port)
-        else:
-            # No certs found and HTTP not allowed: fall back to localhost without SSL
-            print("No SSL certificate/key found. To run with HTTP set DEV_ALLOW_HTTP=1 or provide SSL_CERT and SSL_KEY.")
-            app.run(host=host, debug=debug, port=port)
+    # Ensure cookies are not set as secure so local HTTP works
+    print(f"Running on http://{bind_host}:{port}")
+    app.run(host=bind_host, debug=debug, port=port)
