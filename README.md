@@ -37,7 +37,7 @@ Structure
 - `static/` — static assets
 - `requirements.txt` — Python dependencies
 
-- Run the app (using Gunicorn):
+Run the app (using Gunicorn):
 ```bash
 bash run.sh
 ```
