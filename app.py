@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, url_for, redirect, flash, session
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
+from flask_wtf import CSRFProtect
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.middleware.proxy_fix import ProxyFix
 from forms import LoginForm, SignUpForm, ForgotPasswordForm, ResetPasswordForm, ProfileForm, AnswerForm, DeleteAccountForm
@@ -8,6 +9,8 @@ from datetime import datetime
 import logging
 import os
 import secrets
+import atexit
+import signal
 
 app = Flask(__name__)
 # Fix for running behind a reverse proxy (Tailscale, nginx, Render, etc.)
@@ -21,23 +24,112 @@ app.config['SQLALCHEMY_DATABASE_URI'] = database_url
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-# Secret key: read from env or generate a random one for local dev
-app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY') or secrets.token_hex(32)
+# Secret key handling:
+# - Prefer `SECRET_KEY` environment variable when provided.
+# - Otherwise persist a generated key to `instance/secret_key` so it remains
+#   consistent for the lifetime of the server process.
+# - Remove the file on server shutdown (SIGINT/SIGTERM or normal exit).
+env_secret = os.environ.get('SECRET_KEY')
+secret_file_path = os.path.join(app.instance_path, 'secret_key')
+_manage_secret_file = False
+if env_secret:
+    app.config['SECRET_KEY'] = env_secret
+else:
+    _manage_secret_file = True
+    try:
+        os.makedirs(app.instance_path, exist_ok=True)
+    except Exception:
+        pass
+
+    if os.path.exists(secret_file_path):
+        try:
+            with open(secret_file_path, 'r') as f:
+                app.config['SECRET_KEY'] = f.read().strip()
+        except Exception:
+            app.config['SECRET_KEY'] = secrets.token_hex(32)
+            try:
+                with open(secret_file_path, 'w') as f:
+                    f.write(app.config['SECRET_KEY'])
+                os.chmod(secret_file_path, 0o600)
+            except Exception:
+                pass
+    else:
+        app.config['SECRET_KEY'] = secrets.token_hex(32)
+        try:
+            with open(secret_file_path, 'w') as f:
+                f.write(app.config['SECRET_KEY'])
+            os.chmod(secret_file_path, 0o600)
+        except Exception:
+            pass
+
+
+def _cleanup_secret_file():
+    try:
+        if _manage_secret_file and os.path.exists(secret_file_path):
+            os.remove(secret_file_path)
+    except Exception:
+        pass
+
+
+def _signal_handler(signum, frame):
+    _cleanup_secret_file()
+    try:
+        signal.signal(signum, signal.SIG_DFL)
+    except Exception:
+        pass
+    os._exit(0)
+
+
+# Register cleanup for normal interpreter exit and termination signals
+atexit.register(_cleanup_secret_file)
+try:
+    signal.signal(signal.SIGINT, _signal_handler)
+    signal.signal(signal.SIGTERM, _signal_handler)
+except Exception:
+    # Some environments may not allow setting signal handlers
+    pass
 
 # Determine environment (Render sets PORT); treat presence of PORT as production
 is_prod = bool(os.environ.get('PORT') or os.environ.get('FLASK_ENV') == 'production' or os.environ.get('RENDER'))
 
-# Simplified cookie and CSRF settings for basic local development
-app.config['SESSION_COOKIE_SECURE'] = False
+# Cookie and CSRF settings
+# Keep cookies HttpOnly and set SameSite by env (default: Lax)
 app.config['SESSION_COOKIE_HTTPONLY'] = True
 app.config['SESSION_COOKIE_SAMESITE'] = os.environ.get('SESSION_COOKIE_SAMESITE', 'Lax')
-app.config['WTF_CSRF_ENABLED'] = False
-app.config['PREFERRED_URL_SCHEME'] = 'http'
+
+# Enable secure cookies when running in production (behind TLS like Tailscale)
+# This allows local development over HTTP while ensuring browsers require TLS in prod.
+app.config['SESSION_COOKIE_SECURE'] = bool(is_prod)
+app.config['REMEMBER_COOKIE_SECURE'] = bool(is_prod)
+app.config['REMEMBER_COOKIE_HTTPONLY'] = True
+
+# Enable CSRF protection for all Flask-WTF forms
+app.config['WTF_CSRF_ENABLED'] = True
+app.config['WTF_CSRF_TIME_LIMIT'] = 60 * 60  # 1 hour
+
+# Prefer https URLs when in production (external TLS handled by reverse proxy)
+app.config['PREFERRED_URL_SCHEME'] = 'https' if is_prod else 'http'
 
 db = SQLAlchemy(app)
 login_manager = LoginManager(app)
 login_manager.login_view = "login" # type: ignore
 login_manager.session_protection = "strong"
+
+# Initialize CSRF protection (adds validation for POST, PUT, DELETE, etc.)
+csrf = CSRFProtect(app)
+
+
+@app.after_request
+def set_secure_headers(response):
+    # Basic security headers to harden the app against common attacks
+    response.headers.setdefault('X-Frame-Options', 'DENY')
+    response.headers.setdefault('X-Content-Type-Options', 'nosniff')
+    response.headers.setdefault('Referrer-Policy', 'no-referrer-when-downgrade')
+    response.headers.setdefault('Permissions-Policy', 'geolocation=(), microphone=()')
+    # Conservative CSP to allow static assets while preventing cross-origin content
+    csp = "default-src 'self'; img-src 'self' data:; script-src 'self'; style-src 'self' 'unsafe-inline';"
+    response.headers.setdefault('Content-Security-Policy', csp)
+    return response
 
 class Users(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
