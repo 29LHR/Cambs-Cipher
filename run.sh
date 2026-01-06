@@ -1,5 +1,1 @@
-python -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
-export DATABASE_URL='postgresql+psycopg2://user:pass@localhost:5432/cambs_cipher'
-python app.py
+gunicorn -b 127.0.0.1:5500 -w 4 app:app
