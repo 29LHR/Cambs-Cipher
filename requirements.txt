@@ -5,3 +5,13 @@ flask_wtf
 werkzeug
 gunicorn
 python-dotenv
+email_validator
+bcrypt
+itsdangerous
+pytest
+pytest-flask
+requests
+pytest-cov
+black
+flake8
+mypy
