@@ -11,33 +11,33 @@ challenges_data = [
     {
         "id": 1,
         "title": "Introduction",
-        "published": True,
+        "published": False,
         "ciphertext": "KHOOR ZRUOG",
         "plaintext": "HELLO WORLD",
         "tips": "This is a Caesar cipher with a shift of 3. Each letter is shifted forward by 3 positions in the alphabet.",
-        "points_reward": 5,
+        "points_reward": 0,
         "release_time": None,  # Always available
         "closing_time": None   # Never closes
     },
     {
         "id": 2,
         "title": "Challenge 1 (Practice)",
-        "published": True,
+        "published": False,
         "ciphertext": "WKH TXLFN EURZQ IRA MXPSV RYHU WKH ODCB GRJ",
         "plaintext": "THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG",
         "tips": "Another Caesar cipher. Try different shift values!",
-        "points_reward": 10,
+        "points_reward": 0,
         "release_time": datetime(2025, 12, 28, 21, 0),
         "closing_time": datetime(2025, 12, 28, 21, 40)
     },
     {
         "id": 3,
         "title": "Challenge 2 (Practice)",
-        "published": True,
+        "published": False,
         "ciphertext": "GUVF VF N FRPERG ZRFFNTR",
         "plaintext": "THIS IS A SECRET MESSAGE",
         "tips": "This is a ROT13 cipher - each letter is shifted by 13 positions.",
-        "points_reward": 10,
+        "points_reward": 0,
         "release_time": datetime(2025, 12, 29, 21, 0),
         "closing_time": datetime(2025, 12, 29, 21, 40)
     },
@@ -48,7 +48,7 @@ challenges_data = [
         "ciphertext": "",
         "plaintext": "",
         "tips": "",
-        "points_reward": 15,
+        "points_reward": 0,
         "release_time": None,
         "closing_time": None
     },
@@ -59,7 +59,7 @@ challenges_data = [
         "ciphertext": "",
         "plaintext": "",
         "tips": "",
-        "points_reward": 20,
+        "points_reward": 15,
         "release_time": None,
         "closing_time": None
     },
@@ -70,7 +70,7 @@ challenges_data = [
         "ciphertext": "",
         "plaintext": "",
         "tips": "",
-        "points_reward": 20,
+        "points_reward": 30,
         "release_time": None,
         "closing_time": None
     },
@@ -81,7 +81,7 @@ challenges_data = [
         "ciphertext": "",
         "plaintext": "",
         "tips": "",
-        "points_reward": 25,
+        "points_reward": 45,
         "release_time": None,
         "closing_time": None
     },
@@ -92,7 +92,7 @@ challenges_data = [
         "ciphertext": "",
         "plaintext": "",
         "tips": "",
-        "points_reward": 25,
+        "points_reward": 60,
         "release_time": None,
         "closing_time": None
     },
@@ -103,7 +103,7 @@ challenges_data = [
         "ciphertext": "",
         "plaintext": "",
         "tips": "",
-        "points_reward": 30,
+        "points_reward": 75,
         "release_time": None,
         "closing_time": None
     },
@@ -114,7 +114,7 @@ challenges_data = [
         "ciphertext": "",
         "plaintext": "",
         "tips": "",
-        "points_reward": 30,
+        "points_reward": 90,
         "release_time": None,
         "closing_time": None
     },
@@ -125,7 +125,7 @@ challenges_data = [
         "ciphertext": "",
         "plaintext": "",
         "tips": "",
-        "points_reward": 35,
+        "points_reward": 105,
         "release_time": None,
         "closing_time": None
     },
@@ -136,54 +136,10 @@ challenges_data = [
         "ciphertext": "",
         "plaintext": "",
         "tips": "",
-        "points_reward": 35,
+        "points_reward": 120,
         "release_time": None,
         "closing_time": None
-    },
-    {
-        "id": 13,
-        "title": "Challenge 12",
-        "published": False,
-        "ciphertext": "",
-        "plaintext": "",
-        "tips": "",
-        "points_reward": 40,
-        "release_time": None,
-        "closing_time": None
-    },
-    {
-        "id": 14,
-        "title": "Challenge 13",
-        "published": False,
-        "ciphertext": "",
-        "plaintext": "",
-        "tips": "",
-        "points_reward": 40,
-        "release_time": None,
-        "closing_time": None
-    },
-    {
-        "id": 15,
-        "title": "Challenge 14",
-        "published": False,
-        "ciphertext": "",
-        "plaintext": "",
-        "tips": "",
-        "points_reward": 45,
-        "release_time": None,
-        "closing_time": None
-    },
-    {
-        "id": 16,
-        "title": "Challenge 15",
-        "published": False,
-        "ciphertext": "",
-        "plaintext": "",
-        "tips": "",
-        "points_reward": 50,
-        "release_time": None,
-        "closing_time": None
-    },
+    }
 ]
 
 with app.app_context():
