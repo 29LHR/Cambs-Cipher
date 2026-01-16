@@ -6,6 +6,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.middleware.proxy_fix import ProxyFix
 from forms import LoginForm, SignUpForm, ForgotPasswordForm, ResetPasswordForm, ProfileForm, AnswerForm, DeleteAccountForm
 from datetime import datetime
+from sqlalchemy import func
 import logging
 import os
 import secrets
@@ -453,7 +454,7 @@ def login():
         password = form.password.data
         next_page = form.next.data
 
-        user = Users.query.filter_by(username=username).first()
+        user = Users.query.filter(func.lower(Users.username) == str(username).lower()).first()
 
         if user and user.password and password and check_password_hash(user.password, password):
             login_user(user)
