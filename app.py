@@ -21,7 +21,7 @@ app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_prefix=1)
 # Database: use `DATABASE_URL` / `SQLALCHEMY_DATABASE_URI` when provided,
 # otherwise fall back to a local SQLite file for simplicity and easy Render
 # deployment without needing a managed Postgres DB.
-database_url = os.environ.get('DATABASE_URL') or os.environ.get('SQLALCHEMY_DATABASE_URI') or 'https://cambscipher.tail24ded.ts.net'
+database_url = os.environ.get('DATABASE_URL')  or 'https://cambscipher.tail24ded.ts.net'
 app.config['SQLALCHEMY_DATABASE_URI'] = database_url
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
