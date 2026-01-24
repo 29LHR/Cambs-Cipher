@@ -4,10 +4,11 @@ import requests
 DB_SERVICE = os.environ.get('DB_SERVICE_URL', 'http://127.0.0.1:5600')
 API_KEY = os.environ.get('DB_SERVICE_API_KEY') or os.environ.get('DB_API_KEY')
 
+if not API_KEY:
+    raise RuntimeError("DB_SERVICE_API_KEY or DB_API_KEY must be set to talk to the DB service")
+
 def _headers():
-    if API_KEY:
-        return {'X-API-KEY': API_KEY}
-    return {}
+    return {'X-API-KEY': API_KEY}
 
 def _url(path):
     return DB_SERVICE.rstrip('/') + path
