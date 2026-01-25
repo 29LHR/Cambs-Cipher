@@ -24,13 +24,21 @@ body {
 	letter-spacing: 0.3px;
 }
 
-/* Two-column layout for challenges */
-.challengesList > div {
+/* Two-column layout for challenges (excluding intro) */
+.challengesList > .challenges-grid {
 	display: grid;
 	grid-template-columns: 1fr 1fr;
-	grid-template-rows: repeat(8, auto);
+	grid-template-rows: repeat(6, auto);
 	gap: 8px;
 	grid-auto-flow: column; /* fill columns top-to-bottom */
+}
+
+/* Full-width introduction section */
+.challengesList > .intro-section {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: 8px;
+	margin-bottom: 8px;
 }
 
 .challengesList a {
