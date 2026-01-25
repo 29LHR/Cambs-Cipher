@@ -13,6 +13,10 @@ import os
 import secrets
 import atexit
 import signal
+from dotenv import load_dotenv
+
+# Load environment variables from .env file if present
+load_dotenv()
 
 app = Flask(__name__)
 # Fix for running behind a reverse proxy (Tailscale, nginx, Render, etc.)
@@ -21,7 +25,7 @@ app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_prefix=1)
 # Database: use `DATABASE_URL` / `SQLALCHEMY_DATABASE_URI` when provided,
 # otherwise fall back to a local SQLite file for simplicity and easy Render
 # deployment without needing a managed Postgres DB.
-database_url = os.environ.get('DATABASE_URL')  or 'https://cambscipher.tail24ded.ts.net'
+database_url = os.getenv('DATABASE_URL')  or 'https://cambscipher.tail24ded.ts.net'
 app.config['SQLALCHEMY_DATABASE_URI'] = database_url
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -31,7 +35,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 # - Otherwise persist a generated key to `instance/secret_key` so it remains
 #   consistent for the lifetime of the server process.
 # - Remove the file on server shutdown (SIGINT/SIGTERM or normal exit).
-env_secret = os.environ.get('SECRET_KEY')
+env_secret = os.getenv('SECRET_KEY')
 secret_file_path = os.path.join(app.instance_path, 'secret_key')
 _manage_secret_file = False
 if env_secret:
@@ -92,12 +96,12 @@ except Exception:
     pass
 
 # Determine environment (Render sets PORT); treat presence of PORT as production
-is_prod = bool(os.environ.get('PORT') or os.environ.get('FLASK_ENV') == 'production' or os.environ.get('RENDER'))
+is_prod = bool(os.getenv('PORT') or os.getenv('FLASK_ENV') == 'production' or os.getenv('RENDER'))
 
 # Cookie and CSRF settings
 # Keep cookies HttpOnly and set SameSite by env (default: Lax)
 app.config['SESSION_COOKIE_HTTPONLY'] = True
-app.config['SESSION_COOKIE_SAMESITE'] = os.environ.get('SESSION_COOKIE_SAMESITE', 'Lax')
+app.config['SESSION_COOKIE_SAMESITE'] = os.getenv('SESSION_COOKIE_SAMESITE', 'Lax')
 
 # Enable secure cookies when running in production (behind TLS like Tailscale)
 # This allows local development over HTTP while ensuring browsers require TLS in prod.
@@ -522,10 +526,10 @@ def reset_password():
 
 if __name__ == '__main__':
     # Simplified runtime for basic HTTP development
-    host = os.environ.get('FLASK_HOST', '127.0.0.1')
-    port = int(os.environ.get('FLASK_PORT', '5500'))
-    debug = os.environ.get('FLASK_DEBUG', '1') == '1'
-    bind_host = os.environ.get('FLASK_BIND', '127.0.0.1')
+    host = os.getenv('FLASK_HOST', '127.0.0.1')
+    port = int(os.getenv('FLASK_PORT', '5500'))
+    debug = os.getenv('FLASK_DEBUG', '1') == '1'
+    bind_host = os.getenv('FLASK_BIND', '127.0.0.1')
 
     # Ensure cookies are not set as secure so local HTTP works
     print(f"Running on http://{bind_host}:{port}")
