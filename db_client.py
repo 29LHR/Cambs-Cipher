@@ -1,8 +1,10 @@
 import os
 import requests
+from dotenv import load_dotenv
 
-DB_SERVICE = os.environ.get('DB_SERVICE_URL', 'http://127.0.0.1:5600')
-API_KEY = os.environ.get('DB_SERVICE_API_KEY') or os.environ.get('DB_API_KEY')
+load_dotenv()
+DB_SERVICE = os.getenv('DB_SERVICE_URL', 'https://cambscipher.tail24ded.ts.net')
+API_KEY = os.getenv('DB_SERVICE_API_KEY') or os.getenv('DB_API_KEY')
 
 if not API_KEY:
     raise RuntimeError("DB_SERVICE_API_KEY or DB_API_KEY must be set to talk to the DB service")
