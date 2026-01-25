@@ -3,6 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="View the leaderboard for The Cambridge Cipher and see how you rank against other cryptographers. Check top scores and your position."
+    />
     <link rel="icon" href="{{ url_for('static', filename='logo.png') }}" />
     <link
       rel="stylesheet"
@@ -161,7 +165,18 @@
           </thead>
           <tbody>
             {% for user in users %}
-            <tr {% if current_user.is_authenticated and user.username==current_user.username %}class="current-user"{% endif %}>
+            <tr
+              {%
+              if
+              current_user.is_authenticated
+              and
+              user.username=""
+              ="current_user.username"
+              %}class="current-user"
+              {%
+              endif
+              %}
+            >
               <td
                 class="rank {% if user.rank == 1 %}rank-1{% elif user.rank == 2 %}rank-2{% elif user.rank == 3 %}rank-3{% endif %}"
               >
