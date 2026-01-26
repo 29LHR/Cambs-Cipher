@@ -136,6 +136,20 @@ def set_secure_headers(response):
     response.headers.setdefault('Content-Security-Policy', csp)
     return response
 
+@app.errorhandler(500)
+def internal_error(error):
+    logging.exception("Internal server error")
+    return render_template('challenges/notPublished.html', 
+                         message="An unexpected error occurred. Please try again later."), 500
+
+@app.errorhandler(Exception)
+def handle_exception(e):
+    # Log the error for debugging
+    logging.exception(f"Unhandled exception: {e}")
+    # Return a generic error page
+    return render_template('challenges/notPublished.html', 
+                         message="An unexpected error occurred. Please try again later."), 500
+
 class RemoteUser(UserMixin):
     def __init__(self, data: dict):
         self.id = data.get('id')
@@ -241,7 +255,9 @@ def challenges():
 @app.route('/challenge/<int:challenge_id>')
 def challenge_detail(challenge_id):
     challenge = db_client.get_challenge(challenge_id)
-    if not challenge or not challenge.get('published'):
+    if not challenge:
+        return render_template('challenges/notPublished.html', message="Unable to load challenge. Please try again later.")
+    if not challenge.get('published'):
         return render_template('challenges/notPublished.html')
 
     status = challenge.get('status')
@@ -271,7 +287,10 @@ def challenge_detail(challenge_id):
 @login_required
 def submit_answer(challenge_id):
     challenge = db_client.get_challenge(challenge_id)
-    if not challenge or challenge.get('status') != 'active':
+    if not challenge:
+        flash("Unable to load challenge. Please try again later.", "error")
+        return redirect(url_for('challenges'))
+    if challenge.get('status') != 'active':
         return render_template('challenges/notPublished.html')
 
     form = AnswerForm()
@@ -287,7 +306,13 @@ def submit_answer(challenge_id):
 
     if form.validate_on_submit():
         answer = form.answer.data or ''
-        res = db_client.submit_answer(current_user.id, challenge_id, answer)
+        try:
+            res = db_client.submit_answer(current_user.id, challenge_id, answer)
+        except Exception as e:
+            logging.exception(f"Error submitting answer: {e}")
+            flash("Unable to submit answer. Please try again later.", "error")
+            return render_template('challenges/challenge.html', challenge=challenge, already_completed=False, form=form)
+        
         if not res.get('ok'):
             if res.get('reason') == 'incorrect':
                 flash("Incorrect answer. Try again!", "error")
