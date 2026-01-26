@@ -443,30 +443,6 @@
     </div>
     <div class="footer">Lucas Rooke &copy; 2026</div>
     <script src="{{ url_for('static', filename='Styling/menuBar.js') }}"></script>
-    <script>
-      function toggleTips() {
-        const content = document.getElementById("tips-content");
-        const button = document.querySelector(".tips-toggle");
-        if (content.style.display === "none" || content.style.display === "") {
-          content.style.display = "block";
-          button.classList.add("open");
-        } else {
-          content.style.display = "none";
-          button.classList.remove("open");
-        }
-      }
-
-      function toggleBonuses() {
-        const content = document.getElementById("bonuses-content");
-        const button = document.querySelector(".bonuses-toggle");
-        if (content.style.display === "none" || content.style.display === "") {
-          content.style.display = "block";
-          button.classList.add("open");
-        } else {
-          content.style.display = "none";
-          button.classList.remove("open");
-        }
-      }
-    </script>
+    <script src="{{ url_for('static', filename='Styling/challenge.js') }}"></script>
   </body>
 </html>
