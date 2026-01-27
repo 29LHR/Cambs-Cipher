@@ -261,10 +261,18 @@ def challenge_detail(challenge_id):
     status = challenge.get('status')
     if status == 'upcoming':
         rt = challenge.get('release_time')
-        return render_template('challenges/notPublished.html', message=f"This challenge opens on {rt}")
+        if hasattr(rt, 'strftime'):
+            rt_formatted = rt.strftime('%d %b %Y, %H:%M')
+        else:
+            rt_formatted = str(rt)
+        return render_template('challenges/notPublished.html', message=f"This challenge opens on {rt_formatted}")
     if status == 'closed':
         ct = challenge.get('closing_time')
-        return render_template('challenges/notPublished.html', message=f"This challenge closed on {ct}")
+        if hasattr(ct, 'strftime'):
+            ct_formatted = ct.strftime('%d %b %Y, %H:%M')
+        else:
+            ct_formatted = str(ct)
+        return render_template('challenges/notPublished.html', message=f"This challenge closed on {ct_formatted}")
 
     already_completed = False
     if current_user.is_authenticated:
