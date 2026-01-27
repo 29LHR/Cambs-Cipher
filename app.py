@@ -5,6 +5,7 @@ from flask_wtf import CSRFProtect
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.middleware.proxy_fix import ProxyFix
 from forms import LoginForm, SignUpForm, ForgotPasswordForm, ResetPasswordForm, ProfileForm, AnswerForm, DeleteAccountForm
+from datetime import datetime
 import db_client
 import logging
 import os
@@ -261,14 +262,26 @@ def challenge_detail(challenge_id):
     status = challenge.get('status')
     if status == 'upcoming':
         rt = challenge.get('release_time')
-        if hasattr(rt, 'strftime'):
+        if isinstance(rt, str):
+            try:
+                rt = datetime.fromisoformat(rt.replace('Z', '+00:00'))
+                rt_formatted = rt.strftime('%d %b %Y, %H:%M')
+            except (ValueError, AttributeError):
+                rt_formatted = str(rt)
+        elif hasattr(rt, 'strftime'):
             rt_formatted = rt.strftime('%d %b %Y, %H:%M')
         else:
             rt_formatted = str(rt)
         return render_template('challenges/notPublished.html', message=f"This challenge opens on {rt_formatted}")
     if status == 'closed':
         ct = challenge.get('closing_time')
-        if hasattr(ct, 'strftime'):
+        if isinstance(ct, str):
+            try:
+                ct = datetime.fromisoformat(ct.replace('Z', '+00:00'))
+                ct_formatted = ct.strftime('%d %b %Y, %H:%M')
+            except (ValueError, AttributeError):
+                ct_formatted = str(ct)
+        elif hasattr(ct, 'strftime'):
             ct_formatted = ct.strftime('%d %b %Y, %H:%M')
         else:
             ct_formatted = str(ct)
