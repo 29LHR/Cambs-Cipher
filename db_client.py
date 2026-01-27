@@ -118,7 +118,7 @@ def delete_user(user_id):
 
 def get_leaderboard():
     try:
-        r = requests.get(_url('/api/leaderboard'), headers=_headers(), timeout=10)
+        r = requests.get(_url('/api/leaderboard'), headers=_headers())
         r.raise_for_status()
         return r.json()
     except requests.exceptions.RequestException as e:

@@ -14,6 +14,7 @@ import atexit
 import signal
 from dotenv import load_dotenv
 
+
 # Load environment variables from .env file if present
 load_dotenv()
 
@@ -138,6 +139,7 @@ def set_secure_headers(response):
 @app.errorhandler(500)
 def internal_error(error):
     logging.exception("Internal server error")
+    print(f"Internal server error: {error}")
     return render_template('challenges/notPublished.html', 
                          message="An unexpected error occurred. Please try again later."), 500
 
@@ -145,6 +147,7 @@ def internal_error(error):
 def handle_exception(e):
     # Log the error for debugging
     logging.exception(f"Unhandled exception: {e}")
+    print(f"Unhandled exception: {e}")
     # Return a generic error page
     return render_template('challenges/notPublished.html', 
                          message="An unexpected error occurred. Please try again later."), 500
@@ -232,9 +235,12 @@ def help_transposition():
 @app.route('/leaderboard')
 def leaderboard():
     users = db_client.get_leaderboard()
+    if not users:
+        return render_template('leaderboard.html', users=[], error="Unable to load leaderboard. Please try again later.")
+    
     ranked_users = []
     current_rank = 1
-    previous_points = None
+    previous_points = 0
     for i, user in enumerate(users):
         if previous_points is not None and user['points'] < previous_points:
             current_rank = i + 1
@@ -371,14 +377,23 @@ def rules():
 @login_required
 def dashboard():
     all_challenges = db_client.list_challenges()
+    if not all_challenges:
+        all_challenges = []
+    
     completed_rows = db_client.get_user_completed(current_user.id)
-    completed_ids = set(r['challenge_id'] for r in completed_rows)
+    if not completed_rows:
+        completed_rows = []
+    completed_ids = set(r.get('challenge_id') for r in completed_rows if r)
 
     challenge_statuses = []
     for ch in all_challenges:
-        challenge_statuses.append({'challenge': ch, 'status': ch.get('status')})
+        if ch:
+            challenge_statuses.append({'challenge': ch, 'status': ch.get('status')})
 
     users = db_client.get_leaderboard()
+    if not users:
+        users = []
+    
     position = 1
     for i, u in enumerate(users):
         if u.get('id') == current_user.id:
