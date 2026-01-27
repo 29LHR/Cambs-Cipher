@@ -5,14 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="View the leaderboard for The Cambridge Cipher and see how you rank against other cryptographers. Check top scores and your position."
+      content="View the leaderboard for The Cambs Cipher and see how you rank against other cryptographers. Check top scores and your position."
     />
     <link rel="icon" href="{{ url_for('static', filename='logo.png') }}" />
     <link
       rel="stylesheet"
       href="{{ url_for('static', filename='Styling/base.css') }}"
     />
-    <title>Leaderboard - The Cambridge Cipher</title>
+    <title>Leaderboard - The Cambs Cipher</title>
     <style>
       .leaderboard-container {
         flex: 1;
@@ -143,7 +143,7 @@
         <a href="/dashboard">Dashboard</a>
         <a href="mailto:cambscipher@outlook.com">Email</a>
       </nav>
-      <a class="brand" href="/">The Cambridge Cipher</a>
+      <a class="brand" href="/">The Cambs Cipher</a>
     </div>
 
     <div class="leaderboard-container">
@@ -170,7 +170,8 @@
               if
               current_user.is_authenticated
               and
-              user.username=="current_user.username"
+              user.username=""
+              ="current_user.username"
               %}class="current-user"
               {%
               endif
