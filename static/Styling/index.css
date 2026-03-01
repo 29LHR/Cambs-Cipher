@@ -194,6 +194,71 @@ body {
 	margin: 0;
 }
 
+/* Instagram button styling (keeps the site's maroon theme) */
+.instagram-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: 1px solid #800000;
+  color: #800000;
+  background: #fff;
+  text-decoration: none;
+  font-weight: 700;
+  box-shadow: 0 6px 14px rgba(128, 0, 0, 0.06);
+  transition: transform 140ms ease, background 140ms ease, color 140ms ease;
+}
+.instagram-btn:hover,
+.instagram-btn:focus {
+  background: #800000;
+  color: #fff;
+  transform: translateY(-2px);
+  outline: none;
+}
+.instagram-btn .inst-icon {
+  width: 18px;
+  height: 18px;
+  display: block;
+}
+
+/* Compact footer variant (smaller, less pronounced shadow/transform) */
+.instagram-footer {
+  padding: 6px 8px;
+  border-radius: 8px;
+  font-weight: 600;
+  gap: 6px;
+  box-shadow: none;
+}
+.instagram-footer .inst-icon {
+  width: 12px;
+  height: 12px;
+}
+.instagram-footer:hover,
+.instagram-footer:focus {
+  transform: none;
+  background: #800000;
+  color: #fff;
+}
+
+/* Filled primary variant for prominent CTA (used on index) */
+.instagram-primary {
+  background: linear-gradient(180deg, #8f2a2a, #6b0000);
+  color: #fff;
+  border-color: transparent;
+  box-shadow: 0 8px 22px rgba(139, 18, 18, 0.18);
+}
+.instagram-primary .inst-icon {
+  /* white strokes on filled button */
+  width: 18px;
+  height: 18px;
+}
+.instagram-primary:focus,
+.instagram-primary:hover {
+  transform: translateY(-2px);
+  outline: 3px solid rgba(128,0,0,0.12);
+}
+
 /* Breathing room below the header on mobile */
 @media (max-width: 640px) {
 	.main { margin: 12px 16px; }
@@ -209,4 +274,7 @@ body {
 	.register {
 		margin: 0;
 	}
+
+	.instagram-btn { padding: 6px 8px; }
+	.instagram-footer { padding: 3px 4px; }
 }
