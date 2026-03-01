@@ -587,6 +587,10 @@ def reset_password():
     
     return render_template("auth/resetPassword.html", form=form, username=user.username)
 
+@app.route('/decoders')
+def decoders():
+    return render_template('decoders.html')
+
 if __name__ == '__main__':
     # Simplified runtime for basic HTTP development
     host = os.getenv('FLASK_HOST', '127.0.0.1')
