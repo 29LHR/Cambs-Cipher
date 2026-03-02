@@ -1,110 +1,79 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    {% block meta %}
-    <meta
-      name="description"
-      content="Manage your profile for The Cambs Cipher. Update your account information and view your personal cryptography statistics."
-    />
-    {% endblock %}
-    <link rel="icon" href="{{ url_for('static', filename='logo.png') }}" />
-    {% block extra_css %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='Styling/auth.css') }}" />
-    <style>
-      .auth-box { max-width: 500px }
-      .success { background-color: #e8f5e9; color: #2e7d32; padding:12px; border-radius:8px; text-align:center; margin-bottom:16px }
-      .form-row { display:flex; gap:16px }
-      .form-row > div { flex:1; display:flex; flex-direction:column }
-    </style>
-    {% endblock %}
-    <title>Profile - The Cambs Cipher</title>
-  </head>
-  <body>
-    <div class="header">
-      <button
-        class="menu-toggle"
-        aria-controls="primary-nav"
-        aria-expanded="false"
-        aria-label="Toggle menu"
-      >
-        <span class="bar"></span>
-        <span class="bar"></span>
-        <span class="bar"></span>
-      </button>
+{% extends 'base.html' %}
 
-      <nav id="primary-nav" class="nav">
-        <a href="/">Home</a>
-        <a href="/challenges">Challenges</a>
-        <a href="/leaderboard">Leaderboard</a>
-        <a href="/dashboard">Dashboard</a>
-        <a href="/decoders">Decoders</a>
-        <a href="mailto:cambscipher@outlook.com">Email</a>
-      </nav>
-      <a class="brand" href="/">The Cambs Cipher</a>
-    </div>
+{% block meta %}
+<meta
+  name="description"
+  content="Manage your profile for The Cambs Cipher. Update your account information and view your personal cryptography statistics."
+/>
+{% endblock %}
 
-    {% block content %}
-    <div class="auth-container">
-      <div class="auth-box">
-        <h1>Your Profile</h1>
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='Styling/auth.css') }}" />
+<style>
+  .auth-box { max-width: 500px }
+  .success { background-color: #e8f5e9; color: #2e7d32; padding:12px; border-radius:8px; text-align:center; margin-bottom:16px }
+  .form-row { display:flex; gap:16px }
+  .form-row > div { flex:1; display:flex; flex-direction:column }
+</style>
+{% endblock %}
 
-        {% with messages = get_flashed_messages(with_categories=true) %}{% for category, message in messages %}
-          <p class="{{ category }}">{{ message }}</p>
-        {% endfor %}{% endwith %}
+{% block title %}Profile - The Cambs Cipher{% endblock %}
 
-        <form action="{{ url_for('profile') }}" method="post">
-          {{ form.hidden_tag() }}
-          <div class="form-row">
-            <div>
-              <label for="firstName">First Name:</label>
-              <input type="text" id="firstName" name="firstName" value="{{ form.firstName.data or current_user.firstName or '' }}" required />
-              {% for error in form.firstName.errors %}<span class="field-error">{{ error }}</span>{% endfor %}
-            </div>
-            <div>
-              <label for="lastName">Last Name:</label>
-              <input type="text" id="lastName" name="lastName" value="{{ form.lastName.data or current_user.lastName or '' }}" required />
-              {% for error in form.lastName.errors %}<span class="field-error">{{ error }}</span>{% endfor %}
-            </div>
-          </div>
+{% block content %}
+<div class="auth-container">
+  <div class="auth-box">
+    <h1>Your Profile</h1>
 
-          <label for="email">Email:</label>
-          <input type="email" id="email" name="email" value="{{ form.email.data or current_user.email or '' }}" required />
-          {% for error in form.email.errors %}<span class="field-error">{{ error }}</span>{% endfor %}
+    {% with messages = get_flashed_messages(with_categories=true) %}{% for category, message in messages %}
+      <p class="{{ category }}">{{ message }}</p>
+    {% endfor %}{% endwith %}
 
-          <label for="birthdate">Date of Birth:</label>
-          <input type="date" id="birthdate" name="birthdate" value="{{ form.birthdate.data or current_user.birthdate or '' }}" required />
-          {% for error in form.birthdate.errors %}<span class="field-error">{{ error }}</span>{% endfor %}
-
-          <label for="school">School:</label>
-          <input type="text" id="school" name="school" value="{{ form.school.data or current_user.school or '' }}" required />
-          {% for error in form.school.errors %}<span class="field-error">{{ error }}</span>{% endfor %}
-
-          <label for="username">Username:</label>
-          <input type="text" id="username" name="username" value="{{ current_user.username }}" disabled />
-          <button type="submit">Save Changes</button>
-        </form>
-
-        <hr class="separator" />
-
-        <div class="danger-zone">
-          <h3 class="danger-title">Danger Zone</h3>
-          <p class="danger-text">Once you delete your account, there is no going back. Please be certain.</p>
-          <form action="{{ url_for('delete_account') }}" method="post" onsubmit="return confirm('Are you sure you want to delete your account? This action cannot be undone.');">
-            {{ delete_form.hidden_tag() }}
-            <button type="submit" class="danger-btn">Delete Account</button>
-          </form>
+    <form action="{{ url_for('profile') }}" method="post">
+      {{ form.hidden_tag() }}
+      <div class="form-row">
+        <div>
+          <label for="firstName">First Name:</label>
+          <input type="text" id="firstName" name="firstName" value="{{ form.firstName.data or current_user.firstName or '' }}" required />
+          {% for error in form.firstName.errors %}<span class="field-error">{{ error }}</span>{% endfor %}
         </div>
-
-        <div class="auth-links">
-          <p><a href="/dashboard">← Back to Dashboard</a></p>
+        <div>
+          <label for="lastName">Last Name:</label>
+          <input type="text" id="lastName" name="lastName" value="{{ form.lastName.data or current_user.lastName or '' }}" required />
+          {% for error in form.lastName.errors %}<span class="field-error">{{ error }}</span>{% endfor %}
         </div>
       </div>
-    </div>
-    {% endblock %}
 
-    <div class="footer">The Cambs Cipher &copy; 2026</div>
-    <script src="{{ url_for('static', filename='Styling/menuBar.js') }}"></script>
-  </body>
-</html>
+      <label for="email">Email:</label>
+      <input type="email" id="email" name="email" value="{{ form.email.data or current_user.email or '' }}" required />
+      {% for error in form.email.errors %}<span class="field-error">{{ error }}</span>{% endfor %}
+
+      <label for="birthdate">Date of Birth:</label>
+      <input type="date" id="birthdate" name="birthdate" value="{{ form.birthdate.data or current_user.birthdate or '' }}" required />
+      {% for error in form.birthdate.errors %}<span class="field-error">{{ error }}</span>{% endfor %}
+
+      <label for="school">School:</label>
+      <input type="text" id="school" name="school" value="{{ form.school.data or current_user.school or '' }}" required />
+      {% for error in form.school.errors %}<span class="field-error">{{ error }}</span>{% endfor %}
+
+      <label for="username">Username:</label>
+      <input type="text" id="username" name="username" value="{{ current_user.username }}" disabled />
+      <button type="submit">Save Changes</button>
+    </form>
+
+    <hr class="separator" />
+
+    <div class="danger-zone">
+      <h3 class="danger-title">Danger Zone</h3>
+      <p class="danger-text">Once you delete your account, there is no going back. Please be certain.</p>
+      <form action="{{ url_for('delete_account') }}" method="post" onsubmit="return confirm('Are you sure you want to delete your account? This action cannot be undone.');">
+        {{ delete_form.hidden_tag() }}
+        <button type="submit" class="danger-btn">Delete Account</button>
+      </form>
+    </div>
+
+    <div class="auth-links">
+      <p><a href="/dashboard">← Back to Dashboard</a></p>
+    </div>
+  </div>
+</div>
+{% endblock %}
