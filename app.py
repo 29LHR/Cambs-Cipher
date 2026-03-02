@@ -258,6 +258,7 @@ def challenges():
     return render_template('challenges.html')
 
 @app.route('/challenge/<int:challenge_id>')
+@login_required
 def challenge_detail(challenge_id):
     challenge = db_client.get_challenge(challenge_id)
     if not challenge:
