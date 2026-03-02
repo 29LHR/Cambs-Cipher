@@ -3,16 +3,15 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    {% block meta %}
     <meta
       name="description"
       content="Discover the Playfair Cipher - a digraph substitution cipher used in The Cambs Cipher. Learn the technique and strategies to solve it."
     />
+    {% endblock %}
     <link rel="icon" href="{{ url_for('static', filename='logo.png') }}" />
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='Styling/base.css') }}"
-    />
-    <title>Playfair Cipher - The Cambs Cipher</title>
+    {% block extra_css %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='Styling/base.css') }}" />
     <style>
       .help-container {
         max-width: 800px;
@@ -69,6 +68,8 @@
         background: #ffe0b2;
       }
     </style>
+    {% endblock %}
+    <title>{% block title %}Playfair - The Cambs Cipher{% endblock %}</title>
   </head>
   <body>
     <div class="header">
@@ -93,6 +94,7 @@
       <a class="brand" href="/">The Cambs Cipher</a>
     </div>
 
+    {% block content %}
     <div class="help-container">
       <a href="/" class="back-link">← Back to Home</a>
 
@@ -216,6 +218,7 @@
         </ul>
       </div>
     </div>
+    {% endblock %}
 
     <script src="{{ url_for('static', filename='Styling/menuBar.js') }}"></script>
   </body>

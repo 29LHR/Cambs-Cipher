@@ -1,192 +1,62 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta
-      name="description"
-      content="View the leaderboard for The Cambs Cipher and see how you rank against other cryptographers. Check top scores and your position."
-    />
-    <link rel="icon" href="{{ url_for('static', filename='logo.png') }}" />
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='Styling/base.css') }}"
-    />
-    <title>Leaderboard - The Cambs Cipher</title>
-    <style>
-      .leaderboard-container {
-        flex: 1;
-        padding: 40px 20px;
-        max-width: 900px;
-        margin: 0 auto;
-        width: 100%;
-        box-sizing: border-box;
-      }
+{% extends 'base.html' %}
 
-      .leaderboard-header {
-        text-align: center;
-        margin-bottom: 30px;
-      }
+{% block meta %}
+<meta name="description" content="View the leaderboard for The Cambs Cipher and see how you rank against other cryptographers. Check top scores and your position." />
+{% endblock %}
 
-      .leaderboard-header h1 {
-        color: #800000;
-        margin-bottom: 10px;
-      }
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='Styling/base.css') }}" />
+<style>
+  .leaderboard-container { flex:1; padding:40px 20px; max-width:900px; margin:0 auto; width:100%; box-sizing:border-box }
+  .leaderboard-header { text-align:center; margin-bottom:30px }
+  .leaderboard-header h1 { color:#800000; margin-bottom:10px }
+  .leaderboard-header p { color:#666 }
+  .leaderboard-table { width:100%; background:#fff; border-radius:12px; box-shadow:0 4px 20px rgba(0,0,0,0.1); overflow:hidden }
+  .leaderboard-table table { width:100%; border-collapse:collapse }
+  .leaderboard-table th, .leaderboard-table td { padding:16px 20px; text-align:left }
+  .leaderboard-table th { background:#800000; color:#fff; font-weight:600; text-transform:uppercase; font-size:0.85rem }
+  .leaderboard-table tr:nth-child(even){ background:#f9f9f9 }
+  .rank { font-weight:700; color:#800000; font-size:1.1rem }
+  .points { font-weight:600; color:#800000 }
+  .no-users { text-align:center; padding:40px; color:#666 }
+  .current-user { background-color:#fff3e0 !important; border-left:4px solid #800000 }
+</style>
+{% endblock %}
 
-      .leaderboard-header p {
-        color: #666;
-      }
+{% block title %}Leaderboard - The Cambs Cipher{% endblock %}
 
-      .leaderboard-table {
-        width: 100%;
-        background-color: #ffffff;
-        border-radius: 12px;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-        overflow: hidden;
-      }
+{% block content %}
+<div class="leaderboard-container">
+  <div class="leaderboard-header">
+    <h1>🏆 Leaderboard</h1>
+    <p>See how you rank against other cryptographers!</p>
+  </div>
 
-      .leaderboard-table table {
-        width: 100%;
-        border-collapse: collapse;
-      }
-
-      .leaderboard-table th,
-      .leaderboard-table td {
-        padding: 16px 20px;
-        text-align: left;
-      }
-
-      .leaderboard-table th {
-        background-color: #800000;
-        color: #ffffff;
-        font-weight: 600;
-        text-transform: uppercase;
-        font-size: 0.85rem;
-        letter-spacing: 0.5px;
-      }
-
-      .leaderboard-table tr:nth-child(even) {
-        background-color: #f9f9f9;
-      }
-
-      .leaderboard-table tr:hover {
-        background-color: #f0f0f0;
-      }
-
-      .leaderboard-table td {
-        color: #333;
-        border-bottom: 1px solid #eee;
-      }
-
-      .rank {
-        font-weight: 700;
-        color: #800000;
-        font-size: 1.1rem;
-      }
-
-      .rank-1 {
-        color: #ffd700;
-      }
-      .rank-2 {
-        color: #c0c0c0;
-      }
-      .rank-3 {
-        color: #cd7f32;
-      }
-
-      .points {
-        font-weight: 600;
-        color: #800000;
-      }
-
-      .no-users {
-        text-align: center;
-        padding: 40px;
-        color: #666;
-      }
-
-      .current-user {
-        background-color: #fff3e0 !important;
-        border-left: 4px solid #800000;
-      }
-
-      .current-user td {
-        font-weight: 600;
-      }
-
-      @media (max-width: 640px) {
-        .leaderboard-table th,
-        .leaderboard-table td {
-          padding: 12px 10px;
-          font-size: 0.9rem;
-        }
-      }
-    </style>
-  </head>
-  <body>
-    <div class="header">
-      <button
-        class="menu-toggle"
-        aria-controls="primary-nav"
-        aria-expanded="false"
-        aria-label="Toggle menu"
-      >
-        <span class="bar"></span>
-        <span class="bar"></span>
-        <span class="bar"></span>
-      </button>
-
-      <nav id="primary-nav" class="nav">
-        <a href="/">Home</a>
-        <a href="/challenges">Challenges</a>
-        <a href="/leaderboard" aria-current="page">Leaderboard</a>
-        <a href="/dashboard">Dashboard</a>
-        <a href="/decoders">Decoders</a>
-        <a href="mailto:cambscipher@outlook.com">Email</a>
-      </nav>
-      <a class="brand" href="/">The Cambs Cipher</a>
-    </div>
-
-    <div class="leaderboard-container">
-      <div class="leaderboard-header">
-        <h1>🏆 Leaderboard</h1>
-        <p>See how you rank against other cryptographers!</p>
-      </div>
-
-      <div class="leaderboard-table">
-        {% if users %}
-        <table>
-          <thead>
-            <tr>
-              <th>Rank</th>
-              <th>Username</th>
-              <th>School</th>
-              <th>Points</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for user in users %}
-            <tr {% if current_user.is_authenticated and user.username == current_user.username %}class="current-user"{% endif %}>
-              <td
-                class="rank {% if user.rank == 1 %}rank-1{% elif user.rank == 2 %}rank-2{% elif user.rank == 3 %}rank-3{% endif %}"
-              >
-                #{{ user.rank }}
-              </td>
-              <td>{{ user.username }}</td>
-              <td>{{ user.school }}</td>
-              <td class="points">{{ user.points }}</td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-        {% else %}
-        <div class="no-users">
-          <p>No users yet. Be the first to earn points!</p>
-        </div>
-        {% endif %}
-      </div>
-    </div>
-    <div class="footer">The Cambs Cipher &copy; 2026</div>
-    <script src="{{ url_for('static', filename='Styling/menuBar.js') }}"></script>
-  </body>
-</html>
+  <div class="leaderboard-table">
+    {% if users %}
+    <table>
+      <thead>
+        <tr>
+          <th>Rank</th>
+          <th>Username</th>
+          <th>School</th>
+          <th>Points</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for user in users %}
+        <tr {% if current_user.is_authenticated and user.username == current_user.username %}class="current-user"{% endif %}>
+          <td class="rank {% if user.rank == 1 %}rank-1{% elif user.rank == 2 %}rank-2{% elif user.rank == 3 %}rank-3{% endif %}">#{{ user.rank }}</td>
+          <td>{{ user.username }}</td>
+          <td>{{ user.school }}</td>
+          <td class="points">{{ user.points }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <div class="no-users"><p>No users yet. Be the first to earn points!</p></div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

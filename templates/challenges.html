@@ -3,20 +3,21 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    {% block meta %}
     <meta
       name="description"
       content="Challenge yourself with The Cambs Cipher. Solve a variety of cryptography challenges ranging from beginner practice to advanced puzzles."
     />
+    {% endblock %}
     <link rel="icon" href="{{ url_for('static', filename='logo.png') }}" />
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='Styling/challenges.css') }}"
-    />
+    {% block extra_css %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='Styling/challenges.css') }}" />
+    {% endblock %}
     <link
       rel="stylesheet"
       href="{{ url_for('static', filename='Styling/base.css') }}"
     />
-    <title>The Cambs Cipher</title>
+    <title>{% block title %}The Cambs Cipher - Challenges{% endblock %}</title>
   </head>
   <body>
     <div class="header">
@@ -42,6 +43,7 @@
       <a class="brand" href="/" aria-current="page">The Cambs Cipher</a>
     </div>
 
+    {% block content %}
     <div class="parts">
       <div class="main">
         <h1>The Challenges</h1>
@@ -90,12 +92,13 @@
             <li>
               Answers are not case-sensitive and punctuation will be ignored
             </li>
-            <li>Don't use online decryption tools</li>
+            <li>Don't use online decryption tools except the ones on cambscipher.app</li>
             <li>You must be under 18 to earn prizes however all are welcome to take part</li>
           </ul>
         </div>
       </div>
     </div>
+    {% endblock %}
     <div class="footer">The Cambs Cipher &copy; 2026</div>
     <script src="{{ url_for('static', filename='Styling/menuBar.js') }}"></script>
   </body>

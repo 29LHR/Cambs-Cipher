@@ -1,0 +1,80 @@
+/* Extracted page styles and utilities (moved from inline <style> blocks) */
+
+/* Decoders */
+.decoder-container { max-width: 900px; margin: 32px auto; padding: 20px; }
+.decoder-card { background: #fff; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); padding: 28px; }
+.decoder-card h1 { color: #800000; margin-top: 0; }
+.decoder-row { display:flex; gap:18px; flex-wrap:wrap }
+.decoder-col { flex:1 1 300px; min-width:260px }
+label { display:block; font-weight:600; margin-bottom:8px }
+textarea, input[type="text"], input[type="number"] { width:100%; padding:10px 12px; border-radius:8px; border:1px solid #ddd; font-size:1rem; box-sizing:border-box; resize:vertical }
+.controls { display:flex; gap:12px; align-items:center; margin-top:12px; flex-wrap:wrap }
+.btn { background:#800000; color:#fff; border:none; padding:10px 14px; border-radius:8px; cursor:pointer; font-weight:600 }
+.btn.secondary { background:#eee; color:#333 }
+.small { font-size:0.9rem }
+.output-box { background:#f8f8f8; padding:12px; border-radius:8px; min-height:80px; white-space:pre-wrap; font-family:monospace }
+
+/* Leaderboard */
+.leaderboard-container { flex:1; padding:40px 20px; max-width:900px; margin:0 auto; width:100%; box-sizing:border-box }
+.leaderboard-header { text-align:center; margin-bottom:30px }
+.leaderboard-header h1 { color:#800000; margin-bottom:10px }
+.leaderboard-header p { color:#666 }
+.leaderboard-table { width:100%; background:#fff; border-radius:12px; box-shadow:0 4px 20px rgba(0,0,0,0.1); overflow:hidden }
+.leaderboard-table table { width:100%; border-collapse:collapse }
+.leaderboard-table th, .leaderboard-table td { padding:16px 20px; text-align:left }
+.leaderboard-table th { background:#800000; color:#fff; font-weight:600; text-transform:uppercase; font-size:0.85rem }
+.leaderboard-table tr:nth-child(even){ background:#f9f9f9 }
+.rank { font-weight:700; color:#800000; font-size:1.1rem }
+.points { font-weight:600; color:#800000 }
+.no-users { text-align:center; padding:40px; color:#666 }
+.current-user { background-color:#fff3e0 !important; border-left:4px solid #800000 }
+
+/* Profile / auth */
+.auth-box { max-width: 500px }
+.success { background-color: #e8f5e9; color: #2e7d32; padding:12px; border-radius:8px; text-align:center; margin-bottom:16px }
+.form-row { display:flex; gap:16px }
+.form-row > div { flex:1; display:flex; flex-direction:column }
+.separator { margin: 30px 0; border: none; border-top: 1px solid #ddd }
+.danger-zone .danger-title { color: #c62828; margin-bottom: 10px }
+.danger-zone .danger-text { color: #666; margin-bottom: 16px; font-size: 0.9rem }
+.danger-btn { background-color: #c62828; width:100%; color: #fff; border:none; padding:10px 14px; border-radius:6px }
+
+/* Challenges / challenge page */
+.challenge-container { flex:1; padding:40px 20px; max-width:900px; margin:0 auto; width:100%; box-sizing:border-box }
+.challenge-header { background:#fff; border-radius:12px; box-shadow:0 4px 20px rgba(0,0,0,0.1); padding:30px; margin-bottom:24px; display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:16px }
+.challenge-header h1 { color:#800000; margin:0 0 10px 0 }
+.challenge-card { background:#fff; border-radius:12px; box-shadow:0 4px 20px rgba(0,0,0,0.1); padding:30px; margin-bottom:24px }
+.ciphertext-box { background:#f5f5f5; border:2px solid #ddd; border-radius:8px; padding:20px; font-family:monospace; font-size:1.1rem; line-height:1.8; word-break:break-all; white-space:pre-wrap }
+.tips-box { background:#fff3e0; border-left:4px solid #ff9800; padding:16px 20px; border-radius:0 8px 8px 0 }
+.answer-form { display:flex; gap:12px; flex-wrap:wrap }
+.answer-form input { flex:1; min-width:200px; padding:14px; border:2px solid #ddd; border-radius:8px }
+.answer-form input:focus { outline:none; border-color:#800000 }
+.answer-form button { background:#800000; color:#fff; border:none; padding:14px 28px; border-radius:8px; font-weight:600 }
+.back-link { display:inline-block; color:#800000; text-decoration:none; font-weight:600; margin-bottom:20px }
+.success { background:#e8f5e9; color:#2e7d32; padding:12px; border-radius:8px; text-align:center; margin-bottom:16px }
+.error { background:#ffebee; color:#c62828; padding:12px; border-radius:8px; text-align:center; margin-bottom:16px }
+.already-completed { background-color: #e8f5e9; border-left:4px solid #4caf50; padding:16px 20px; border-radius:0 8px 8px 0 }
+.already-completed p { margin:0; color:#2e7d32; font-weight:600 }
+.field-error-block { display:block; margin-top:8px }
+.login-link { color:#800000; font-weight:600 }
+.closed-challenge { background-color: #f5f5f5; border-left: 4px solid #aaa }
+.closed-challenge .challenge-status { color: #aaa }
+.closed-challenge .challenge-points { background-color: #aaa; color: white }
+
+/* Not published */
+.not-published-container { flex:1; display:flex; justify-content:center; align-items:center; padding:40px 20px }
+.not-published-box { background:#fff; border-radius:12px; box-shadow:0 4px 20px rgba(0,0,0,0.1); padding:60px 40px; max-width:500px; text-align:center }
+.not-published-icon { font-size:4rem; margin-bottom:20px }
+.not-published-box h1 { color:#800000; margin-bottom:16px; font-size:1.8rem }
+.not-published-box p { color:#666; line-height:1.6; margin-bottom:24px }
+.back-btn { display:inline-block; background-color:#800000; color:#fff; text-decoration:none; padding:12px 24px; border-radius:8px; font-weight:600; transition: background-color 200ms ease, transform 100ms ease }
+.back-btn:hover { background-color:#600000; transform:translateY(-2px) }
+
+/* Utilities */
+.mt-12 { margin-top:12px }
+.mt-16 { margin-top:16px }
+.mt-18 { margin-top:18px }
+.ml-8 { margin-left:8px }
+.btn-row { margin-top:12px; display:flex; gap:8px }
+.flex-gap-8 { display:flex; gap:8px }
+.muted-text { color: #666 }

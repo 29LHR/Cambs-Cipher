@@ -1,84 +1,41 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta
-      name="description"
-      content="Login to The Cambs Cipher and access your cipher challenges, track progress, and compete on the leaderboard."
-    />
-    <link rel="icon" href="{{ url_for('static', filename='logo.png') }}" />
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='Styling/auth.css') }}"
-    />
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='Styling/base.css') }}"
-    />
-    <title>Login - The Cambs Cipher</title>
-  </head>
-  <body>
-    <div class="header">
-      <button
-        class="menu-toggle"
-        aria-controls="primary-nav"
-        aria-expanded="false"
-        aria-label="Toggle menu"
-      >
-        <span class="bar"></span>
-        <span class="bar"></span>
-        <span class="bar"></span>
-      </button>
+{% extends 'base.html' %}
 
-      <nav id="primary-nav" class="nav">
-        <a href="/">Home</a>
-        <a href="/challenges">Challenges</a>
-        <a href="/leaderboard">Leaderboard</a>
-        <a href="/dashboard">Dashboard</a>
-        <a href="/decoders">Decoders</a>
-        <a href="mailto:cambscipher@outlook.com">Email</a>
-      </nav>
-      <a class="brand" href="/" aria-current="page">The Cambs Cipher</a>
+{% block meta %}
+<meta name="description" content="Login to The Cambs Cipher and access your cipher challenges, track progress, and compete on the leaderboard." />
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='Styling/auth.css') }}" />
+{% endblock %}
+
+{% block title %}Login - The Cambs Cipher{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+  <div class="auth-box">
+    <h1>Login to Your Account</h1>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}{% for category, message in messages %}
+      <p class="{{ category }}">{{ message }}</p>
+    {% endfor %}{% endwith %}
+
+    <form action="{{ url_for('login') }}" method="post">
+      {{ form.hidden_tag() }}
+      <label for="username">Username:</label>
+      <input type="text" id="username" name="username" value="{{ form.username.data or '' }}" required />
+      {% for error in form.username.errors %}<span class="field-error">{{ error }}</span>{% endfor %}
+
+      <label for="password">Password:</label>
+      <input type="password" id="password" name="password" required />
+      {% for error in form.password.errors %}<span class="field-error">{{ error }}</span>{% endfor %}
+
+      <button type="submit">Login</button>
+    </form>
+
+    <div class="auth-links">
+      <p><a href="/auth/forgot-password">Forgot your password?</a></p>
+      <p>Don't have an account? <a href="/auth/signup">Sign up here</a></p>
     </div>
-
-    <div class="auth-container">
-      <div class="auth-box">
-        <h1>Login to Your Account</h1>
-
-        {% with messages = get_flashed_messages(with_categories=true) %} {% for
-        category, message in messages %}
-        <p class="{{ category }}">{{ message }}</p>
-        {% endfor %} {% endwith %}
-
-        <form action="{{ url_for('login') }}" method="post">
-          {{ form.hidden_tag() }}
-          <label for="username">Username:</label>
-          <input
-            type="text"
-            id="username"
-            name="username"
-            value="{{ form.username.data or '' }}"
-            required
-          />
-          {% for error in form.username.errors %}
-          <span class="field-error">{{ error }}</span>
-          {% endfor %}
-          <label for="password">Password:</label>
-          <input type="password" id="password" name="password" required />
-          {% for error in form.password.errors %}
-          <span class="field-error">{{ error }}</span>
-          {% endfor %}
-          <button type="submit">Login</button>
-        </form>
-
-        <div class="auth-links">
-          <p><a href="/auth/forgot-password">Forgot your password?</a></p>
-          <p>Don't have an account? <a href="/auth/signup">Sign up here</a></p>
-        </div>
-      </div>
-    </div>
-
-    <script src="{{ url_for('static', filename='Styling/menuBar.js') }}"></script>
-  </body>
-</html>
+  </div>
+</div>
+{% endblock %}

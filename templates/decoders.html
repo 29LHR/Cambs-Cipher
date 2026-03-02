@@ -1,162 +1,72 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta
-      name="description"
-      content="The Cambs Cipher - Test your cryptography skills with exciting cipher challenges. Crack ciphers, climb the leaderboard, and become a master cryptographer!"
-    />
-    <link rel="icon" href="{{ url_for('static', filename='logo.png') }}" />
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='Styling/index.css') }}"
-    />
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='Styling/base.css') }}"
-    />
-    <title>Decoders - Caesar Cipher</title>
-    <style>
-      .decoder-container {
-        max-width: 900px;
-        margin: 32px auto;
-        padding: 20px;
-      }
-      .decoder-card {
-        background: #fff;
-        border-radius: 12px;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-        padding: 28px;
-      }
-      .decoder-card h1 {
-        color: #800000;
-        margin-top: 0;
-      }
-      .decoder-row {
-        display: flex;
-        gap: 18px;
-        flex-wrap: wrap;
-      }
-      .decoder-col {
-        flex: 1 1 300px;
-        min-width: 260px;
-      }
-      label {
-        display: block;
-        font-weight: 600;
-        margin-bottom: 8px;
-      }
-      textarea, input[type="text"], input[type="number"] {
-        width: 100%;
-        padding: 10px 12px;
-        border-radius: 8px;
-        border: 1px solid #ddd;
-        font-size: 1rem;
-        box-sizing: border-box;
-        resize: vertical;
-      }
-      .controls {
-        display: flex;
-        gap: 12px;
-        align-items: center;
-        margin-top: 12px;
-        flex-wrap: wrap;
-      }
-      .btn {
-        background: #800000;
-        color: #fff;
-        border: none;
-        padding: 10px 14px;
-        border-radius: 8px;
-        cursor: pointer;
-        font-weight: 600;
-      }
-      .btn.secondary {
-        background: #eee;
-        color: #333;
-      }
-      .small {
-        font-size: 0.9rem;
-      }
-      .output-box {
-        background: #f8f8f8;
-        padding: 12px;
-        border-radius: 8px;
-        min-height: 80px;
-        white-space: pre-wrap;
-        font-family: monospace;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="header">
-      <button
-        class="menu-toggle"
-        aria-controls="primary-nav"
-        aria-expanded="false"
-        aria-label="Toggle menu"
-      >
-        <span class="bar"></span>
-        <span class="bar"></span>
-        <span class="bar"></span>
-      </button>
-      <nav id="primary-nav" class="nav">
-        <a href="/">Home</a>
-        <a href="/challenges">Challenges</a>
-        <a href="/leaderboard">Leaderboard</a>
-        <a href="/dashboard">Dashboard</a>
-        <a href="/decoders">Decoders</a>
-        <a href="mailto:cambscipher@outlook.com">Email</a>
-      </nav>
-      <a class="brand" href="/">The Cambs Cipher</a>
-    </div>
+{% extends 'base.html' %}
 
-    <div class="decoder-container">
+{% block meta %}
+<meta name="description" content="The Cambs Cipher - Tools: Caesar decoder and more" />
+{% endblock %}
 
-      <div class="decoder-card">
-        <h1>🔎 Caesar Cipher Decoder</h1>
-        <p class="small">Encode or decode text using a Caesar shift. Letters preserve case; non-letters are unchanged.</p>
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='Styling/index.css') }}" />
+<style>
+  .decoder-container { max-width: 900px; margin: 32px auto; padding: 20px; }
+  .decoder-card { background: #fff; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); padding: 28px; }
+  .decoder-card h1 { color: #800000; margin-top: 0; }
+  .decoder-row { display:flex; gap:18px; flex-wrap:wrap }
+  .decoder-col { flex:1 1 300px; min-width:260px }
+  label { display:block; font-weight:600; margin-bottom:8px }
+  textarea, input[type="text"], input[type="number"] { width:100%; padding:10px 12px; border-radius:8px; border:1px solid #ddd; font-size:1rem; box-sizing:border-box; resize:vertical }
+  .controls { display:flex; gap:12px; align-items:center; margin-top:12px; flex-wrap:wrap }
+  .btn { background:#800000; color:#fff; border:none; padding:10px 14px; border-radius:8px; cursor:pointer; font-weight:600 }
+  .btn.secondary { background:#eee; color:#333 }
+  .small { font-size:0.9rem }
+  .output-box { background:#f8f8f8; padding:12px; border-radius:8px; min-height:80px; white-space:pre-wrap; font-family:monospace }
+</style>
+{% endblock %}
 
-        <div class="decoder-row" style="margin-top:16px;">
-          <div class="decoder-col">
-            <label for="inputText">Input</label>
-            <textarea id="inputText" rows="6" placeholder="Paste or type ciphertext or plaintext here..."></textarea>
+{% block title %}Decoders - Caesar Cipher{% endblock %}
 
-            <div class="controls">
-              <label for="shift" class="small">Shift</label>
-              <input id="shift" type="number" value="3" min="0" max="25" />
+{% block content %}
+<div class="decoder-container">
+  <div class="decoder-card">
+    <h1>🔎 Caesar Cipher Decoder</h1>
+    <p class="small">Encode or decode text using a Caesar shift. Letters preserve case; non-letters are unchanged.</p>
 
-              <label class="small" style="margin-left:8px;">
-                Mode
-                <select id="mode" class="small">
-                  <option value="decode">Decode</option>
-                  <option value="encode">Encode</option>
-                </select>
-              </label>
+    <div class="decoder-row mt-16">
+      <div class="decoder-col">
+        <label for="inputText">Input</label>
+        <textarea id="inputText" rows="6" placeholder="Paste or type ciphertext or plaintext here..."></textarea>
 
-              <button id="applyBtn" class="btn">Apply</button>
-              <button id="bruteBtn" class="btn secondary">Brute Force</button>
-            </div>
-          </div>
+        <div class="controls">
+          <label for="shift" class="small">Shift</label>
+          <input id="shift" type="number" value="3" min="0" max="25" />
 
-          <div class="decoder-col">
-            <label for="output">Output</label>
-            <div id="output" class="output-box" aria-live="polite"></div>
+          <label class="small ml-8">Mode
+            <select id="mode" class="small">
+              <option value="decode">Decode</option>
+              <option value="encode">Encode</option>
+            </select>
+          </label>
 
-            <div style="margin-top:12px; display:flex; gap:8px;">
-              <button id="copyBtn" class="btn secondary">Copy</button>
-              <button id="clearBtn" class="btn secondary">Clear</button>
-            </div>
-          </div>
+          <button id="applyBtn" class="btn">Apply</button>
+          <button id="bruteBtn" class="btn secondary">Brute Force</button>
         </div>
+      </div>
 
-        <div id="bruteResults" style="margin-top:18px;"></div>
+      <div class="decoder-col">
+        <label for="output">Output</label>
+        <div id="output" class="output-box" aria-live="polite"></div>
+
+        <div class="btn-row">
+          <button id="copyBtn" class="btn secondary">Copy</button>
+          <button id="clearBtn" class="btn secondary">Clear</button>
+        </div>
       </div>
     </div>
 
-    <script src="{{ url_for('static', filename='Styling/decoders.js') }}"></script>
+    <div id="bruteResults" class="mt-18"></div>
+  </div>
+</div>
+{% endblock %}
 
-    <script src="{{ url_for('static', filename='Styling/menuBar.js') }}"></script>
-  </body>
-</html>
+{% block scripts %}
+<script src="{{ url_for('static', filename='Styling/decoders.js') }}"></script>
+{% endblock %}

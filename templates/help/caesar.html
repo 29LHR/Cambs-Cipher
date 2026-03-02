@@ -3,16 +3,15 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    {% block meta %}
     <meta
       name="description"
       content="Learn about the Caesar Cipher - a classic substitution cipher used in The Cambs Cipher challenges. Understand how it works and how to crack it."
     />
+    {% endblock %}
     <link rel="icon" href="{{ url_for('static', filename='logo.png') }}" />
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='Styling/base.css') }}"
-    />
-    <title>Caesar Cipher - The Cambs Cipher</title>
+    {% block extra_css %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='Styling/base.css') }}" />
     <style>
       .help-container {
         max-width: 800px;
@@ -69,6 +68,8 @@
         text-decoration: underline;
       }
     </style>
+    {% endblock %}
+    <title>Caesar Cipher - The Cambs Cipher</title>
   </head>
   <body>
     <div class="header">

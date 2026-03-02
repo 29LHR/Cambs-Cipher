@@ -3,16 +3,15 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    {% block meta %}
     <meta
       name="description"
       content="Master transposition ciphers in The Cambs Cipher. Learn rearrangement techniques and strategies to decrypt transposed messages."
     />
+    {% endblock %}
     <link rel="icon" href="{{ url_for('static', filename='logo.png') }}" />
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='Styling/base.css') }}"
-    />
-    <title>Transposition Cipher - The Cambs Cipher</title>
+    {% block extra_css %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='Styling/base.css') }}" />
     <style>
       .help-container {
         max-width: 800px;
@@ -70,6 +69,8 @@
         color: white;
       }
     </style>
+    {% endblock %}
+    <title>Transposition Cipher - The Cambs Cipher</title>
   </head>
   <body>
     <div class="header">

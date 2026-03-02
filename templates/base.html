@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    {% block meta %}
+    <meta name="description" content="The Cambs Cipher" />
+    {% endblock %}
+    <link rel="icon" href="{{ url_for('static', filename='logo.png') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='Styling/base.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='Styling/pages.css') }}" />
+    {% block extra_css %}{% endblock %}
+    <title>{% block title %}The Cambs Cipher{% endblock %}</title>
+  </head>
+  <body>
+    <div class="header">
+      <button
+        class="menu-toggle"
+        aria-controls="primary-nav"
+        aria-expanded="false"
+        aria-label="Toggle menu"
+      >
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </button>
+
+      <nav id="primary-nav" class="nav">
+        <a href="/">Home</a>
+        <a href="/challenges">Challenges</a>
+        <a href="/leaderboard">Leaderboard</a>
+        <a href="/dashboard">Dashboard</a>
+        <a href="/decoders">Decoders</a>
+        <a href="mailto:cambscipher@outlook.com">Email</a>
+      </nav>
+      <a class="brand" href="/">The Cambs Cipher</a>
+    </div>
+
+    {% block content %}{% endblock %}
+
+    <div class="footer">The Cambs Cipher &copy; 2026</div>
+
+    <script src="{{ url_for('static', filename='Styling/menuBar.js') }}"></script>
+    {% block scripts %}{% endblock %}
+  </body>
+</html>

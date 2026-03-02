@@ -3,295 +3,57 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    {% block meta %}
     <meta
       name="description"
       content="Challenge yourself with The Cambs Cipher. Solve a variety of cryptography challenges ranging from beginner practice to advanced puzzles."
     />
-    <meta
-      name="description"
-      content="Solve cryptography challenges in The Cambs Cipher. Test your codebreaking skills and climb the leaderboard."
-    />
-    <link rel="icon" href="{{ url_for('static', filename='logo.png') }}" />
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='Styling/base.css') }}"
-    />
+    {% endblock %}
+    {% block extra_css %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='Styling/base.css') }}" />
+    <style>
+      .challenge-container { flex:1; padding:40px 20px; max-width:900px; margin:0 auto; width:100%; box-sizing:border-box }
+      .challenge-header { background:#fff; border-radius:12px; box-shadow:0 4px 20px rgba(0,0,0,0.1); padding:30px; margin-bottom:24px; display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:16px }
+      .challenge-header h1 { color:#800000; margin:0 0 10px 0 }
+      .challenge-header .points-badge { display:inline-block; background:#800000; color:#fff; padding:6px 12px; border-radius:20px; font-size:0.9rem; font-weight:600 }
+      .challenge-dates { display:flex; gap:16px; flex-wrap:wrap; margin-top:12px }
+      .challenge-date { display:inline-flex; align-items:center; gap:6px; background:#e3f2fd; color:#1565c0; padding:6px 12px; border-radius:20px; font-size:0.85rem; font-weight:500 }
+      .challenge-date.closes { background:#fff3e0; color:#e65100 }
+      .header-buttons { display:flex; gap:12px; flex-wrap:wrap }
+      .tips-toggle, .bonuses-toggle { background:#fff3e0; border:2px solid #ff9800; color:#e65100; padding:10px 16px; border-radius:8px; font-size:1rem; font-weight:600; cursor:pointer }
+      .bonuses-toggle { background:#e8f5e9; border:2px solid #4caf50; color:#2e7d32 }
+      .tips-toggle:hover { background-color: #ffe0b2 }
+      .bonuses-toggle:hover { background-color: #c8e6c9 }
+      .tips-toggle .arrow, .bonuses-toggle .arrow { display:inline-block; transition:transform 300ms ease }
+      .tips-toggle.open .arrow, .bonuses-toggle.open .arrow { transform:rotate(90deg) }
+      .tips-dropdown, .bonuses-dropdown { display:none; position:absolute; right:0; top:100%; margin-top:8px; background:#fff3e0; border:2px solid #ff9800; border-radius:8px; padding:16px; min-width:280px; max-width:400px; z-index:100 }
+      .bonuses-dropdown { background:#e8f5e9; border:2px solid #4caf50 }
+      .tips-dropdown p, .bonuses-dropdown p { margin:0; color:#666; line-height:1.6 }
+      .bonuses-list { margin:0; padding:0; list-style:none }
+      .bonuses-list li { display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid #c8e6c9 }
+      .bonuses-list li:last-child { border-bottom:none }
+      .bonuses-list .time { font-weight:500; color:#333 }
+      .bonuses-list .bonus { font-weight:600; color:#2e7d32 }
+      .challenge-card { background:#fff; border-radius:12px; box-shadow:0 4px 20px rgba(0,0,0,0.1); padding:30px; margin-bottom:24px }
+      .challenge-card h2 { color:#800000; margin-top:0; margin-bottom:16px; font-size:1.3rem }
+      .ciphertext-box { background:#f5f5f5; border:2px solid #ddd; border-radius:8px; padding:20px; font-family:monospace; font-size:1.1rem; line-height:1.8; word-break:break-all; white-space:pre-wrap }
+      .tips-box { background:#fff3e0; border-left:4px solid #ff9800; padding:16px 20px; border-radius:0 8px 8px 0 }
+      .tips-box p { margin:0; color:#666; line-height:1.6 }
+      .answer-form { display:flex; gap:12px; flex-wrap:wrap }
+      .answer-form input { flex:1; min-width:200px; padding:14px; border:2px solid #ddd; border-radius:8px }
+      .answer-form input:focus { outline:none; border-color:#800000 }
+      .answer-form button { background:#800000; color:#fff; border:none; padding:14px 28px; border-radius:8px; font-weight:600 }
+      .answer-form button:hover { background-color:#600000 }
+      .back-link { display:inline-block; color:#800000; text-decoration:none; font-weight:600; margin-bottom:20px }
+      .back-link:hover { text-decoration:underline }
+      .success { background:#e8f5e9; color:#2e7d32; padding:12px; border-radius:8px; text-align:center; margin-bottom:16px }
+      .error { background:#ffebee; color:#c62828; padding:12px; border-radius:8px; text-align:center; margin-bottom:16px }
+    </style>
+    {% endblock %}
     <title>
       {{ challenge.title or 'Challenge ' ~ challenge.id }} - The Cambridge
       Cipher
     </title>
-    <style>
-      .challenge-container {
-        flex: 1;
-        padding: 40px 20px;
-        max-width: 900px;
-        margin: 0 auto;
-        width: 100%;
-        box-sizing: border-box;
-      }
-
-      .challenge-header {
-        background-color: #ffffff;
-        border-radius: 12px;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-        padding: 30px;
-        margin-bottom: 24px;
-        display: flex;
-        justify-content: space-between;
-        align-items: flex-start;
-        flex-wrap: wrap;
-        gap: 16px;
-      }
-
-      .challenge-header h1 {
-        color: #800000;
-        margin: 0 0 10px 0;
-      }
-
-      .challenge-header .points-badge {
-        display: inline-block;
-        background-color: #800000;
-        color: #ffffff;
-        padding: 6px 12px;
-        border-radius: 20px;
-        font-size: 0.9rem;
-        font-weight: 600;
-      }
-
-      .challenge-dates {
-        display: flex;
-        gap: 16px;
-        flex-wrap: wrap;
-        margin-top: 12px;
-      }
-
-      .challenge-date {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        background-color: #e3f2fd;
-        color: #1565c0;
-        padding: 6px 12px;
-        border-radius: 20px;
-        font-size: 0.85rem;
-        font-weight: 500;
-      }
-
-      .challenge-date.closes {
-        background-color: #fff3e0;
-        color: #e65100;
-      }
-
-      .tips-section {
-        position: relative;
-      }
-
-      .header-buttons {
-        display: flex;
-        gap: 12px;
-        flex-wrap: wrap;
-      }
-
-      .tips-toggle,
-      .bonuses-toggle {
-        background-color: #fff3e0;
-        border: 2px solid #ff9800;
-        color: #e65100;
-        padding: 10px 16px;
-        border-radius: 8px;
-        font-size: 1rem;
-        font-weight: 600;
-        cursor: pointer;
-        transition: background-color 200ms ease;
-      }
-
-      .bonuses-toggle {
-        background-color: #e8f5e9;
-        border: 2px solid #4caf50;
-        color: #2e7d32;
-      }
-
-      .tips-toggle:hover {
-        background-color: #ffe0b2;
-      }
-
-      .bonuses-toggle:hover {
-        background-color: #c8e6c9;
-      }
-
-      .tips-toggle .arrow,
-      .bonuses-toggle .arrow {
-        display: inline-block;
-        transition: transform 300ms ease;
-      }
-
-      .tips-toggle.open .arrow,
-      .bonuses-toggle.open .arrow {
-        transform: rotate(90deg);
-      }
-
-      .tips-dropdown,
-      .bonuses-dropdown {
-        display: none;
-        position: absolute;
-        right: 0;
-        top: 100%;
-        margin-top: 8px;
-        background-color: #fff3e0;
-        border: 2px solid #ff9800;
-        border-radius: 8px;
-        padding: 16px;
-        min-width: 280px;
-        max-width: 400px;
-        z-index: 100;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-      }
-
-      .bonuses-dropdown {
-        background-color: #e8f5e9;
-        border: 2px solid #4caf50;
-      }
-
-      .tips-dropdown p,
-      .bonuses-dropdown p {
-        margin: 0;
-        color: #666;
-        line-height: 1.6;
-      }
-
-      .bonuses-list {
-        margin: 0;
-        padding: 0;
-        list-style: none;
-      }
-
-      .bonuses-list li {
-        display: flex;
-        justify-content: space-between;
-        padding: 8px 0;
-        border-bottom: 1px solid #c8e6c9;
-      }
-
-      .bonuses-list li:last-child {
-        border-bottom: none;
-      }
-
-      .bonuses-list .time {
-        font-weight: 500;
-        color: #333;
-      }
-
-      .bonuses-list .bonus {
-        font-weight: 600;
-        color: #2e7d32;
-      }
-
-      .challenge-card {
-        background-color: #ffffff;
-        border-radius: 12px;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-        padding: 30px;
-        margin-bottom: 24px;
-      }
-
-      .challenge-card h2 {
-        color: #800000;
-        margin-top: 0;
-        margin-bottom: 16px;
-        font-size: 1.3rem;
-      }
-
-      .ciphertext-box {
-        background-color: #f5f5f5;
-        border: 2px solid #ddd;
-        border-radius: 8px;
-        padding: 20px;
-        font-family: monospace;
-        font-size: 1.1rem;
-        line-height: 1.8;
-        word-break: break-all;
-        white-space: pre-wrap;
-      }
-
-      .tips-box {
-        background-color: #fff3e0;
-        border-left: 4px solid #ff9800;
-        padding: 16px 20px;
-        border-radius: 0 8px 8px 0;
-      }
-
-      .tips-box p {
-        margin: 0;
-        color: #666;
-        line-height: 1.6;
-      }
-
-      .answer-form {
-        display: flex;
-        gap: 12px;
-        flex-wrap: wrap;
-      }
-
-      .answer-form input {
-        flex: 1;
-        min-width: 200px;
-        padding: 14px;
-        border: 2px solid #ddd;
-        border-radius: 8px;
-        font-size: 1rem;
-      }
-
-      .answer-form input:focus {
-        outline: none;
-        border-color: #800000;
-      }
-
-      .answer-form button {
-        background-color: #800000;
-        color: #ffffff;
-        border: none;
-        padding: 14px 28px;
-        border-radius: 8px;
-        font-size: 1rem;
-        font-weight: 600;
-        cursor: pointer;
-        transition: background-color 200ms ease;
-      }
-
-      .answer-form button:hover {
-        background-color: #600000;
-      }
-
-      .back-link {
-        display: inline-block;
-        color: #800000;
-        text-decoration: none;
-        font-weight: 600;
-        margin-bottom: 20px;
-      }
-
-      .back-link:hover {
-        text-decoration: underline;
-      }
-
-      .success {
-        background-color: #e8f5e9;
-        color: #2e7d32;
-        padding: 12px;
-        border-radius: 8px;
-        text-align: center;
-        margin-bottom: 16px;
-      }
-
-      .error {
-        background-color: #ffebee;
-        color: #c62828;
-        padding: 12px;
-        border-radius: 8px;
-        text-align: center;
-        margin-bottom: 16px;
-      }
-    </style>
   </head>
   <body>
     <div class="header">
@@ -317,6 +79,7 @@
       <a class="brand" href="/">The Cambs Cipher</a>
     </div>
 
+    {% block content %}
     <div class="challenge-container">
       <a href="/challenges" class="back-link">← Back to Challenges</a>
 
@@ -402,17 +165,8 @@
       <div class="challenge-card">
         <h2>✏️ Submit Your Answer</h2>
         {% if already_completed %}
-        <div
-          style="
-            background-color: #e8f5e9;
-            border-left: 4px solid #4caf50;
-            padding: 16px 20px;
-            border-radius: 0 8px 8px 0;
-          "
-        >
-          <p style="margin: 0; color: #2e7d32; font-weight: 600">
-            ✓ You have already completed this challenge!
-          </p>
+        <div class="already-completed">
+          <p>✓ You have already completed this challenge!</p>
         </div>
         {% elif current_user.is_authenticated %}
         <form
@@ -430,24 +184,21 @@
           <button type="submit">Submit Answer</button>
         </form>
         {% for error in form.answer.errors %}
-        <span class="field-error" style="display: block; margin-top: 8px"
-          >{{ error }}</span
-        >
-        {% endfor %} {% else %}
-        <p style="color: #666">
+        <span class="field-error-block">{{ error }}</span>
+        {% endfor %}
+        {% else %}
+        <p class="mt-12" style="color: #666">
           Please
-          <a
-            href="/auth/login?next=/challenge/{{ challenge.id }}"
-            style="color: #800000; font-weight: 600"
-            >login</a
-          >
+          <a href="/auth/login?next=/challenge/{{ challenge.id }}" class="login-link">login</a>
           to submit your answer.
         </p>
         {% endif %}
       </div>
     </div>
-    <div class="footer">The Cambs Cipher &copy; 2026</div>
-    <script src="{{ url_for('static', filename='Styling/menuBar.js') }}"></script>
+    {% endblock %}
+
+    {% block scripts %}
     <script src="{{ url_for('static', filename='Styling/challenge.js') }}"></script>
+    {% endblock %}
   </body>
 </html>
