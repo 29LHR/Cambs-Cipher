@@ -5,7 +5,7 @@ from flask_wtf import CSRFProtect
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.middleware.proxy_fix import ProxyFix
 from forms import LoginForm, SignUpForm, ForgotPasswordForm, ResetPasswordForm, ProfileForm, AnswerForm, DeleteAccountForm
-from datetime import datetime
+from datetime import datetime, timezone
 import db_client
 import logging
 import os
@@ -602,3 +602,4 @@ if __name__ == '__main__':
     # Ensure cookies are not set as secure so local HTTP works
     print(f"Running on http://{bind_host}:{port}")
     app.run(host=bind_host, debug=debug, port=port)
+
