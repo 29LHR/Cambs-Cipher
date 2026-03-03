@@ -1,204 +1,131 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    {% block meta %}
-    <meta
-      name="description"
-      content="Challenge yourself with The Cambs Cipher. Solve a variety of cryptography challenges ranging from beginner practice to advanced puzzles."
-    />
-    {% endblock %}
-    {% block extra_css %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='Styling/base.css') }}" />
-    <style>
-      .challenge-container { flex:1; padding:40px 20px; max-width:900px; margin:0 auto; width:100%; box-sizing:border-box }
-      .challenge-header { background:#fff; border-radius:12px; box-shadow:0 4px 20px rgba(0,0,0,0.1); padding:30px; margin-bottom:24px; display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:16px }
-      .challenge-header h1 { color:#800000; margin:0 0 10px 0 }
-      .challenge-header .points-badge { display:inline-block; background:#800000; color:#fff; padding:6px 12px; border-radius:20px; font-size:0.9rem; font-weight:600 }
-      .challenge-dates { display:flex; gap:16px; flex-wrap:wrap; margin-top:12px }
-      .challenge-date { display:inline-flex; align-items:center; gap:6px; background:#e3f2fd; color:#1565c0; padding:6px 12px; border-radius:20px; font-size:0.85rem; font-weight:500 }
-      .challenge-date.closes { background:#fff3e0; color:#e65100 }
-      .header-buttons { display:flex; gap:12px; flex-wrap:wrap }
-      .tips-toggle, .bonuses-toggle { background:#fff3e0; border:2px solid #ff9800; color:#e65100; padding:10px 16px; border-radius:8px; font-size:1rem; font-weight:600; cursor:pointer }
-      .bonuses-toggle { background:#e8f5e9; border:2px solid #4caf50; color:#2e7d32 }
-      .tips-toggle:hover { background-color: #ffe0b2 }
-      .bonuses-toggle:hover { background-color: #c8e6c9 }
-      .tips-toggle .arrow, .bonuses-toggle .arrow { display:inline-block; transition:transform 300ms ease }
-      .tips-toggle.open .arrow, .bonuses-toggle.open .arrow { transform:rotate(90deg) }
-      .tips-dropdown, .bonuses-dropdown { display:none; position:absolute; right:0; top:100%; margin-top:8px; background:#fff3e0; border:2px solid #ff9800; border-radius:8px; padding:16px; min-width:280px; max-width:400px; z-index:100 }
-      .bonuses-dropdown { background:#e8f5e9; border:2px solid #4caf50 }
-      .tips-dropdown p, .bonuses-dropdown p { margin:0; color:#666; line-height:1.6 }
-      .bonuses-list { margin:0; padding:0; list-style:none }
-      .bonuses-list li { display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid #c8e6c9 }
-      .bonuses-list li:last-child { border-bottom:none }
-      .bonuses-list .time { font-weight:500; color:#333 }
-      .bonuses-list .bonus { font-weight:600; color:#2e7d32 }
-      .challenge-card { background:#fff; border-radius:12px; box-shadow:0 4px 20px rgba(0,0,0,0.1); padding:30px; margin-bottom:24px }
-      .challenge-card h2 { color:#800000; margin-top:0; margin-bottom:16px; font-size:1.3rem }
-      .ciphertext-box { background:#f5f5f5; border:2px solid #ddd; border-radius:8px; padding:20px; font-family:monospace; font-size:1.1rem; line-height:1.8; word-break:break-all; white-space:pre-wrap }
-      .tips-box { background:#fff3e0; border-left:4px solid #ff9800; padding:16px 20px; border-radius:0 8px 8px 0 }
-      .tips-box p { margin:0; color:#666; line-height:1.6 }
-      .answer-form { display:flex; gap:12px; flex-wrap:wrap }
-      .answer-form input { flex:1; min-width:200px; padding:14px; border:2px solid #ddd; border-radius:8px }
-      .answer-form input:focus { outline:none; border-color:#800000 }
-      .answer-form button { background:#800000; color:#fff; border:none; padding:14px 28px; border-radius:8px; font-weight:600 }
-      .answer-form button:hover { background-color:#600000 }
-      .back-link { display:inline-block; color:#800000; text-decoration:none; font-weight:600; margin-bottom:20px }
-      .back-link:hover { text-decoration:underline }
-      .success { background:#e8f5e9; color:#2e7d32; padding:12px; border-radius:8px; text-align:center; margin-bottom:16px }
-      .error { background:#ffebee; color:#c62828; padding:12px; border-radius:8px; text-align:center; margin-bottom:16px }
-    </style>
-    {% endblock %}
-    <title>
-      {{ challenge.title or 'Challenge ' ~ challenge.id }} - The Cambridge
-      Cipher
-    </title>
-  </head>
-  <body>
-    <div class="header">
-      <button
-        class="menu-toggle"
-        aria-controls="primary-nav"
-        aria-expanded="false"
-        aria-label="Toggle menu"
-      >
-        <span class="bar"></span>
-        <span class="bar"></span>
-        <span class="bar"></span>
-      </button>
+{% extends 'base.html' %}
 
-      <nav id="primary-nav" class="nav">
-        <a href="/">Home</a>
-        <a href="/challenges">Challenges</a>
-        <a href="/leaderboard">Leaderboard</a>
-        <a href="/dashboard">Dashboard</a>
-        <a href="/decoders">Decoders</a>
-        <a href="mailto:cambscipher@outlook.com">Email</a>
-      </nav>
-      <a class="brand" href="/">The Cambs Cipher</a>
-    </div>
+{% block title %}{{ challenge.title or ('Challenge ' ~ challenge.id) }} - The Cambridge Cipher{% endblock %}
 
-    {% block content %}
-    <div class="challenge-container">
-      <a href="/challenges" class="back-link">← Back to Challenges</a>
+{% block meta %}
+<meta name="description" content="Challenge yourself with The Cambs Cipher. Solve a variety of cryptography challenges ranging from beginner practice to advanced puzzles." />
+{% endblock %}
 
-      <div class="challenge-header">
-        <div>
-          <h1>{{ challenge.title or 'Challenge ' ~ challenge.id }}</h1>
-          <span class="points-badge"
-            >🏆 {{ challenge.points_reward }} points</span
-          >
-          {% if challenge.release_time or challenge.closing_time %}
-          <div class="challenge-dates">
-            {% if challenge.release_time %}
-            <span class="challenge-date"
-              >📅 Opens: {{ challenge.release_time.strftime('%d %b %Y, %H:%M')
-              }}</span
-            >
-            {% endif %} {% if challenge.closing_time %}
-            <span class="challenge-date closes"
-              >⏰ Closes: {{ challenge.closing_time.strftime('%d %b %Y, %H:%M')
-              }}</span
-            >
-            {% endif %}
-          </div>
-          {% endif %}
-        </div>
-        <div class="header-buttons">
-          <div class="tips-section">
-            <button class="bonuses-toggle">
-              ⚡ Speed Bonus <span class="arrow">▶</span>
-            </button>
-            <div id="bonuses-content" class="bonuses-dropdown">
-              <ul class="bonuses-list">
-                <li>
-                  <span class="time">Under 10 mins</span
-                  ><span class="bonus">+100%</span>
-                </li>
-                <li>
-                  <span class="time">Under 1 hour</span
-                  ><span class="bonus">+50%</span>
-                </li>
-                <li>
-                  <span class="time">Under 5 hours</span
-                  ><span class="bonus">+25%</span>
-                </li>
-                <li>
-                  <span class="time">Under 10 hours</span
-                  ><span class="bonus">+10%</span>
-                </li>
-                <li>
-                  <span class="time">Under 30 hours</span
-                  ><span class="bonus">+5%</span>
-                </li>
-                <li>
-                  <span class="time">Over 30 hours</span
-                  ><span class="bonus">Base</span>
-                </li>
-              </ul>
-            </div>
-          </div>
-          {% if challenge.tips %}
-          <div class="tips-section">
-            <button class="tips-toggle">
-              💡 Tips <span class="arrow">▶</span>
-            </button>
-            <div id="tips-content" class="tips-dropdown">
-              <p>{{ challenge.tips }}</p>
-            </div>
-          </div>
-          {% endif %}
-        </div>
-      </div>
+{% block extra_css %}
+<style>
+  .challenge-container { flex:1; padding:40px 20px; max-width:900px; margin:0 auto; width:100%; box-sizing:border-box }
+  .challenge-header { background:#fff; border-radius:12px; box-shadow:0 4px 20px rgba(0,0,0,0.1); padding:30px; margin-bottom:24px; display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:16px }
+  .challenge-header h1 { color:#800000; margin:0 0 10px 0 }
+  .challenge-header .points-badge { display:inline-block; background:#800000; color:#fff; padding:6px 12px; border-radius:20px; font-size:0.9rem; font-weight:600 }
+  .challenge-dates { display:flex; gap:16px; flex-wrap:wrap; margin-top:12px }
+  .challenge-date { display:inline-flex; align-items:center; gap:6px; background:#e3f2fd; color:#1565c0; padding:6px 12px; border-radius:20px; font-size:0.85rem; font-weight:500 }
+  .challenge-date.closes { background:#fff3e0; color:#e65100 }
+  .header-buttons { display:flex; gap:12px; flex-wrap:wrap }
+  .tips-section, .bonuses-section { position: relative }
+  .tips-toggle, .bonuses-toggle { background:#fff3e0; border:2px solid #ff9800; color:#e65100; padding:10px 16px; border-radius:8px; font-size:1rem; font-weight:600; cursor:pointer }
+  .bonuses-toggle { background:#e8f5e9; border:2px solid #4caf50; color:#2e7d32 }
+  .tips-toggle:hover { background-color: #ffe0b2 }
+  .bonuses-toggle:hover { background-color: #c8e6c9 }
+  .tips-toggle .arrow, .bonuses-toggle .arrow { display:inline-block; transition:transform 300ms ease }
+  .tips-toggle.open .arrow, .bonuses-toggle.open .arrow { transform:rotate(90deg) }
+  .tips-dropdown, .bonuses-dropdown { display:none; position:absolute; right:0; top:100%; margin-top:8px; background:#fff3e0; border:2px solid #ff9800; border-radius:8px; padding:16px; min-width:280px; max-width:400px; z-index:100 }
+  .bonuses-dropdown { background:#e8f5e9; border:2px solid #4caf50 }
+  .tips-dropdown p, .bonuses-dropdown p { margin:0; color:#666; line-height:1.6 }
+  .bonuses-list { margin:0; padding:0; list-style:none }
+  .bonuses-list li { display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid #c8e6c9 }
+  .bonuses-list li:last-child { border-bottom:none }
+  .bonuses-list .time { font-weight:500; color:#333 }
+  .bonuses-list .bonus { font-weight:600; color:#2e7d32 }
+  .challenge-card { background:#fff; border-radius:12px; box-shadow:0 4px 20px rgba(0,0,0,0.1); padding:30px; margin-bottom:24px }
+  .challenge-card h2 { color:#800000; margin-top:0; margin-bottom:16px; font-size:1.3rem }
+  .ciphertext-box { background:#f5f5f5; border:2px solid #ddd; border-radius:8px; padding:20px; font-family:monospace; font-size:1.1rem; line-height:1.8; word-break:break-all; white-space:pre-wrap }
+  .tips-box { background:#fff3e0; border-left:4px solid #ff9800; padding:16px 20px; border-radius:0 8px 8px 0 }
+  .tips-box p { margin:0; color:#666; line-height:1.6 }
+  .answer-form { display:flex; gap:12px; flex-wrap:wrap }
+  .answer-form input { flex:1; min-width:200px; padding:14px; border:2px solid #ddd; border-radius:8px }
+  .answer-form input:focus { outline:none; border-color:#800000 }
+  .answer-form button { background:#800000; color:#fff; border:none; padding:14px 28px; border-radius:8px; font-weight:600 }
+  .answer-form button:hover { background-color:#600000 }
+  .back-link { display:inline-block; color:#800000; text-decoration:none; font-weight:600; margin-bottom:20px }
+  .back-link:hover { text-decoration:underline }
+  .success { background:#e8f5e9; color:#2e7d32; padding:12px; border-radius:8px; text-align:center; margin-bottom:16px }
+  .error { background:#ffebee; color:#c62828; padding:12px; border-radius:8px; text-align:center; margin-bottom:16px }
+</style>
+{% endblock %}
 
-      {% with messages = get_flashed_messages(with_categories=true) %} {% for
-      category, message in messages %}
-      <p class="{{ category }}">{{ message }}</p>
-      {% endfor %} {% endwith %}
+{% block content %}
+<div class="challenge-container">
+  <a href="/challenges" class="back-link">← Back to Challenges</a>
 
-      <div class="challenge-card">
-        <h2>🔐 Ciphertext</h2>
-        <div class="ciphertext-box">{{ challenge.ciphertext }}</div>
-      </div>
-
-      <div class="challenge-card">
-        <h2>✏️ Submit Your Answer</h2>
-        {% if already_completed %}
-        <div class="already-completed">
-          <p>✓ You have already completed this challenge!</p>
-        </div>
-        {% elif current_user.is_authenticated %}
-        <form
-          action="{{ url_for('submit_answer', challenge_id=challenge.id) }}"
-          method="post"
-          class="answer-form"
-        >
-          {{ form.hidden_tag() }}
-          <input
-            type="text"
-            name="answer"
-            placeholder="Enter the decoded plaintext..."
-            required
-          />
-          <button type="submit">Submit Answer</button>
-        </form>
-        {% for error in form.answer.errors %}
-        <span class="field-error-block">{{ error }}</span>
-        {% endfor %}
-        {% else %}
-        <p class="mt-12" style="color: #666">
-          Please
-          <a href="/auth/login?next=/challenge/{{ challenge.id }}" class="login-link">login</a>
-          to submit your answer.
-        </p>
+  <div class="challenge-header">
+    <div>
+      <h1>{{ challenge.title or ('Challenge ' ~ challenge.id) }}</h1>
+      <span class="points-badge">🏆 {{ challenge.points_reward }} points</span>
+      {% if challenge.release_time or challenge.closing_time %}
+      <div class="challenge-dates">
+        {% if challenge.release_time %}
+        <span class="challenge-date">📅 Opens: {{ challenge.release_time.strftime('%d %b %Y, %H:%M') }}</span>
+        {% endif %}
+        {% if challenge.closing_time %}
+        <span class="challenge-date closes">⏰ Closes: {{ challenge.closing_time.strftime('%d %b %Y, %H:%M') }}</span>
         {% endif %}
       </div>
+      {% endif %}
     </div>
-    {% endblock %}
+    <div class="header-buttons">
+      <div class="bonuses-section">
+        <button class="bonuses-toggle">
+          ⚡ Speed Bonus <span class="arrow">▶</span>
+        </button>
+        <div id="bonuses-content" class="bonuses-dropdown">
+          <ul class="bonuses-list">
+            <li><span class="time">Under 10 mins</span><span class="bonus">+100%</span></li>
+            <li><span class="time">Under 1 hour</span><span class="bonus">+50%</span></li>
+            <li><span class="time">Under 5 hours</span><span class="bonus">+25%</span></li>
+            <li><span class="time">Under 10 hours</span><span class="bonus">+10%</span></li>
+            <li><span class="time">Under 30 hours</span><span class="bonus">+5%</span></li>
+            <li><span class="time">Over 30 hours</span><span class="bonus">Base</span></li>
+          </ul>
+        </div>
+      </div>
 
-    {% block scripts %}
-    <script src="{{ url_for('static', filename='Styling/challenge.js') }}"></script>
-    {% endblock %}
-  </body>
-</html>
+      {% if challenge.tips %}
+      <div class="tips-section">
+        <button class="tips-toggle">💡 Tips <span class="arrow">▶</span></button>
+        <div id="tips-content" class="tips-dropdown">
+          <p>{{ challenge.tips }}</p>
+        </div>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% for category, message in messages %}
+      <p class="{{ category }}">{{ message }}</p>
+    {% endfor %}
+  {% endwith %}
+
+  <div class="challenge-card">
+    <h2>🔐 Ciphertext</h2>
+    <div class="ciphertext-box">{{ challenge.ciphertext }}</div>
+  </div>
+
+  <div class="challenge-card">
+    <h2>✏️ Submit Your Answer</h2>
+    {% if already_completed %}
+      <div class="already-completed"><p>✓ You have already completed this challenge!</p></div>
+    {% elif current_user.is_authenticated %}
+      <form action="{{ url_for('submit_answer', challenge_id=challenge.id) }}" method="post" class="answer-form">
+        {{ form.hidden_tag() }}
+        <input type="text" name="answer" placeholder="Enter the decoded plaintext..." required />
+        <button type="submit">Submit Answer</button>
+      </form>
+      {% for error in form.answer.errors %}
+        <span class="field-error-block">{{ error }}</span>
+      {% endfor %}
+    {% else %}
+      <p class="mt-12" style="color: #666">Please <a href="/auth/login?next=/challenge/{{ challenge.id }}" class="login-link">login</a> to submit your answer.</p>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='Styling/challenge.js') }}"></script>
+{% endblock %}
