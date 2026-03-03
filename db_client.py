@@ -10,10 +10,14 @@ API_KEY = os.getenv('DB_SERVICE_API_KEY') or os.getenv('DB_API_KEY')
 logger = logging.getLogger(__name__)
 
 if not API_KEY:
-    raise RuntimeError("DB_SERVICE_API_KEY or DB_API_KEY must be set to talk to the DB service")
+    logger.warning("DB_SERVICE_API_KEY or DB_API_KEY not set; db_client will operate in a degraded/no-key mode. Remote DB calls may fail with authorization errors.")
+    # keep API_KEY as None to indicate unauthenticated mode
+    API_KEY = None
 
 def _headers():
-    return {'X-API-KEY': API_KEY}
+    if API_KEY:
+        return {'X-API-KEY': API_KEY}
+    return {}
 
 def _url(path):
     return DB_SERVICE.rstrip('/') + path

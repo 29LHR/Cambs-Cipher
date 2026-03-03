@@ -1,11 +1,10 @@
 from flask import Flask, render_template, request, url_for, redirect, flash, session
-import requests
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
 from flask_wtf import CSRFProtect
-from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.security import check_password_hash
 from werkzeug.middleware.proxy_fix import ProxyFix
 from forms import LoginForm, SignUpForm, ForgotPasswordForm, ResetPasswordForm, ProfileForm, AnswerForm, DeleteAccountForm
-from datetime import datetime, timezone
+from datetime import datetime
 import db_client
 import logging
 import os
@@ -265,6 +264,19 @@ def challenge_detail(challenge_id):
         return render_template('challenges/notPublished.html', message="Unable to load challenge. Please try again later.")
     if not challenge.get('published'):
         return render_template('challenges/notPublished.html')
+
+    # Normalize time fields so templates can safely call .strftime on them.
+    for time_key in ('release_time', 'closing_time'):
+        t = challenge.get(time_key)
+        if isinstance(t, str):
+            try:
+                # Accept Zulu (Z) suffixs and convert to aware datetime in UTC
+                parsed = datetime.fromisoformat(t.replace('Z', '+00:00'))
+                challenge[time_key] = parsed
+            except Exception:
+                # leave as-is (templates will skip or display raw string)
+                pass
+
 
     status = challenge.get('status')
     if status == 'upcoming':
@@ -566,7 +578,7 @@ def reset_password():
         flash("Please start the password reset process again.", "error")
         return redirect(url_for("forgot_password"))
     
-    user = Users.query.get(user_id)
+    user = db_client.get_user_by_id(user_id)
     if not user:
         session.pop('reset_user_id', None)
         flash("Invalid reset session. Please try again.", "error")
@@ -586,7 +598,7 @@ def reset_password():
             flash("An error occurred while resetting your password.", "error")
             return redirect(url_for("forgot_password"))
     
-    return render_template("auth/resetPassword.html", form=form, username=user.username)
+    return render_template("auth/resetPassword.html", form=form, username=user.get('username'))
 
 @app.route('/decoders')
 def decoders():
