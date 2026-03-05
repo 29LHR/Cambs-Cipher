@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+
+{% block meta %}
+<meta name="description" content="Terms of Service for The Cambs Cipher - rules, data use, and legal information." />
+{% endblock %}
+
+{% block title %}Terms of Service - The Cambs Cipher{% endblock %}
+
+{% block content %}
+<main class="page-content terms-page" style="margin-left: 20px; margin-right: 20px;">
+  <h1>Terms of Service</h1>
+
+  <p><strong>Last updated:</strong> {{ last_updated or "{{ """ | safe }} 05/03/2026 }}</p>
+
+  <p>Welcome to The Cambs Cipher. These Terms of Service (&quot;Terms&quot;) govern your use of our website, services, and applications (collectively, the "Service"). By accessing or using the Service you agree to these Terms. If you do not agree, do not use the Service.</p>
+
+  <h2>1. Who we are</h2>
+  <p>The Cambs Cipher is operated by the site operator. For questions about these Terms or our data practices, please contact us at the address below.</p>
+
+  <h2>2. Acceptance of Terms</h2>
+  <p>By creating an account, using the Service, or interacting with features (e.g., submitting challenge answers, joining leaderboards), you accept and agree to be bound by these Terms and our <a href="{{ url_for('static', filename='privacy.html') }}">Privacy Policy</a> (where applicable).</p>
+
+  <h2>3. Accounts and passwords</h2>
+  <ul>
+    <li>You must provide accurate information when creating an account. You are responsible for keeping your account credentials secret.</li>
+    <li>We do not store your password in plaintext. Passwords are protected using secure hashing and are not accessible to site operators. We cannot retrieve your password; password resets are handled via secure, time-limited tokens sent to your email.</li>
+    <li>If you suspect unauthorized use of your account, contact us immediately.</li>
+  </ul>
+
+  <h2>4. Data we collect and how we use it</h2>
+  <p>To provide and improve the Service we collect certain personal data. Typical categories include:</p>
+  <ul>
+    <li>Account data: name, username, email address, date of birth, school (if provided) which will be deleted after a maximum of 3 months after the final leaderboard has come through.</li>
+    <li>Usage data: timestamps for challenge openings and submissions, progress, IP address, and analytics data.</li>
+    <li>Communications: messages you send to us and transactional emails (e.g., password resets, notifications).</li>
+      <li>You can delete your account from the profile page on the dashboard</li>
+  </ul>
+
+  <p>Purposes for processing include: account setup and authentication, delivering emails (transactional and optional communications), calculating points and leaderboard placement, maintaining security, and complying with legal obligations.</p>
+
+  <h2>5. Emails and notifications</h2>
+  <ul>
+    <li>We send transactional emails (e.g., password resets, account notifications) and to contact any possible winners.</li>
+    <li>Emails are sent from The Cambs Cipher and not a Third Party</li>
+    <li>Transactional emails (e.g., password resets) cannot be unsubscribed from if needed to operate the Service.</li>
+  </ul>
+
+  <h2>6. Points, timestamps, and score calculation</h2>
+  <p>Points awarded for challenges are calculated based on the challenge opening time and the timestamp of your submission. We store the challenge open timestamp (server time) when a challenge is first accessed and use that as the base for time-based scoring. Submissions are timestamped on receipt by the server. If you believe your score was calculated incorrectly, contact support with details and we will investigate.</p>
+
+  <h2>7. Passwords and security</h2>
+  <p>We follow common security best practices:</p>
+  <ul>
+    <li>Password hashing: passwords are hashed using a modern, secure hashing algorithm. Operators and administrators cannot read or retrieve your plaintext password.</li>
+    <li>Data protection: we use industry-standard measures to protect personal data, but no service can be 100% secure. You should choose a strong, unique password and enable any available account protections.</li>
+  </ul>
+
+  <h2>8. Sharing and third parties</h2>
+  <p>We may share personal data with:</p>
+  <ul>
+    <li>Service providers that perform services on our behalf (e.g., email delivery, hosting, analytics).</li>
+    <li>Legal or government authorities when required by law, court order, or to protect rights and safety.</li>
+  </ul>
+  <p>We require service providers to process data only for specified purposes and to maintain appropriate safeguards.</p>
+
+  <h2>9. Data retention and deletion</h2>
+  <p>We retain personal data as long as necessary to provide the Service, fulfill legal obligations, resolve disputes, and enforce our agreements. You may request deletion or correction of your personal data by contacting us; deletion may be subject to limitations (for example, retention for legal compliance or to preserve integrity of leaderboards).</p>
+
+  <h2>10. Your rights (UK GDPR and similar)</h2>
+  <p>Depending on your jurisdiction you may have rights to access, correct, delete, or export your personal data, and to object to certain processing. If you are an EU resident, the legal basis for processing may include performance of a contract and your consent. If you are a California resident, you may have additional rights under the CCPA. To exercise rights, contact us (see section below).</p>
+
+  <h2>11. Cookies and tracking</h2>
+  <p>We (and third-party providers) use cookies and similar technologies for essential site operation, analytics, and optionally for preferences and advertising. You can control cookie settings via your browser; certain features may require cookies to function.</p>
+
+  <h2>12. User content and conduct</h2>
+  <p>You are responsible for content you submit (e.g., profile details, challenge submissions). Do not submit content that violates laws or third-party rights. We reserve the right to remove content and suspend accounts that breach these Terms.</p>
+
+  <h2>13. Intellectual property</h2>
+  <p>The Service and its content are protected by copyright and other intellectual property laws. You may not copy, reproduce, or create derivative works from the site content except as expressly permitted.</p>
+
+  <h2>14. Termination</h2>
+  <p>We may suspend or terminate accounts that violate these Terms or present a risk to the Service. You may terminate your account by contacting us; termination may not remove certain public information (e.g., leaderboard entries retained for integrity) unless expressly requested and feasible.</p>
+
+  <h2>15. Disclaimers and limitation of liability</h2>
+  <p>The Service is provided &quot;as is&quot; and &quot;as available.&quot; To the maximum extent permitted by law, we disclaim warranties and limit liability for damages arising from use of the Service.</p>
+
+  <h2>16. Indemnification</h2>
+  <p>You agree to indemnify and hold harmless the Service and its operators from claims arising from your breach of these Terms or misuse of the Service.</p>
+
+  <h2>17. Changes to these Terms</h2>
+  <p>We may revise these Terms. If changes are material we will provide notice (e.g., via email or prominent notice). Continued use after the effective date constitutes acceptance of the revised Terms.</p>
+
+  <h2>18. Governing law and disputes</h2>
+  <p>These Terms are governed by the laws of the jurisdiction where the operator is based (please contact us for specifics). Disputes will be resolved under that law and venue unless otherwise required by local law.</p>
+
+  <h2>19. Contact</h2>
+  <p>To exercise data rights, ask questions, or report problems, contact: <a href="mailto:admin@example.com">admin@example.com</a>.</p>
+
+  <hr />
+  <p><em>Disclaimer: This template is provided for general informational purposes and does not constitute legal advice. Laws vary by jurisdiction. Consult a qualified attorney to tailor these Terms to your organization and ensure compliance with applicable laws (for example, GDPR, UK data protection law, CCPA).</em></p>
+</main>
+{% endblock %}
+

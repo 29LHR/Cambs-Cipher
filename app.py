@@ -201,6 +201,23 @@ def load_user(user_id):
     except Exception:
         return None
 
+def _normalize_challenge_times(challenge: dict):
+    """Convert ISO timestamp strings in a challenge dict to datetime objects when possible.
+    This allows templates to safely call .strftime without raising when the API returns strings.
+    """
+    if not isinstance(challenge, dict):
+        return challenge
+    for key in ('release_time', 'closing_time'):
+        t = challenge.get(key)
+        if isinstance(t, str):
+            try:
+                parsed = datetime.fromisoformat(t.replace('Z', '+00:00'))
+                challenge[key] = parsed
+            except Exception:
+                # leave as-is; template will render as string fallback
+                pass
+    return challenge
+
 #Routes
 @app.route('/')
 def index():
@@ -325,11 +342,15 @@ def challenge_detail(challenge_id):
 @login_required
 def submit_answer(challenge_id):
     challenge = db_client.get_challenge(challenge_id)
+    # Normalize time fields so templates can safely call .strftime
+    if challenge:
+        _normalize_challenge_times(challenge)
     if not challenge:
         flash("Unable to load challenge. Please try again later.", "error")
         return redirect(url_for('challenges'))
     if challenge.get('status') != 'active':
-        return render_template('challenges/notPublished.html')
+        flash("This challenge is not currently active.", "error")
+        return redirect(url_for('challenge_detail', challenge_id=challenge_id))
 
     form = AnswerForm()
 
@@ -340,47 +361,71 @@ def submit_answer(challenge_id):
         already_completed = challenge_id in completed_ids
     if already_completed:
         flash("You have already completed this challenge!", "error")
-        return render_template('challenges/challenge.html', challenge=challenge, already_completed=True, form=form)
+        return redirect(url_for('challenge_detail', challenge_id=challenge_id))
 
-    if form.validate_on_submit():
-        answer = form.answer.data or ''
-        try:
-            res = db_client.submit_answer(current_user.id, challenge_id, answer)
-        except Exception as e:
-            logging.exception(f"Error submitting answer: {e}")
-            flash("Unable to submit answer. Please try again later.", "error")
-            return render_template('challenges/challenge.html', challenge=challenge, already_completed=False, form=form)
-        
-        if not res.get('ok'):
-            if res.get('reason') == 'incorrect':
-                flash("Incorrect answer. Try again!", "error")
-            elif res.get('reason') == 'already_completed':
-                flash("You have already completed this challenge!", "error")
-            else:
-                flash("Submission failed.", "error")
-            return render_template('challenges/challenge.html', challenge=challenge, already_completed=False, form=form)
-
-        time_taken_seconds = res.get('time_seconds', 0)
-        points_earned = res.get('points', 0)
-
-        mins, secs = divmod(time_taken_seconds, 60)
-        time_str = f"{mins}m {secs}s" if mins > 0 else f"{secs}s"
-        bonus = points_earned - (challenge.get('points_reward') or 0)
-        if bonus > 0:
-            flash(f"Correct! Completed in {time_str}. You earned {challenge.get('points_reward')} + {bonus} speed bonus = {points_earned} points!", "success")
+    if not form.validate_on_submit():
+        # Validation failed: flash a message and redirect back (PRG pattern)
+        # Show first validation error if present
+        if form.answer.errors:
+            flash(form.answer.errors[0], "error")
         else:
-            flash(f"Correct! Completed in {time_str}. You earned {points_earned} points!", "success")
+            flash("Please provide a valid answer.", "error")
+        return redirect(url_for('challenge_detail', challenge_id=challenge_id))
 
-        try:
-            data = db_client.get_user_by_id(current_user.id)
-            if data:
-                current_user.points = data.get('points')
-        except Exception:
-            pass
+    # At this point the form validated
+    answer = form.answer.data or ''
+    try:
+        res = db_client.submit_answer(current_user.id, challenge_id, answer)
+    except Exception as e:
+        logging.exception(f"Error submitting answer: {e}")
+        flash("Unable to submit answer. Please try again later.", "error")
+        return redirect(url_for('challenge_detail', challenge_id=challenge_id))
 
-        return render_template('challenges/challenge.html', challenge=challenge, already_completed=True, form=form)
+    # Defensive checks: ensure we have a dict-like response
+    if not isinstance(res, dict):
+        logging.error(f"submit_answer returned unexpected response: {res}")
+        flash("Submission failed. Please try again later.", "error")
+        return redirect(url_for('challenge_detail', challenge_id=challenge_id))
 
-    return render_template('challenges/challenge.html', challenge=challenge, already_completed=False, form=form)
+    if not res.get('ok'):
+        if res.get('reason') == 'incorrect':
+            flash("Incorrect answer. Try again!", "error")
+        elif res.get('reason') == 'already_completed':
+            flash("You have already completed this challenge!", "error")
+        else:
+            flash("Submission failed.", "error")
+        return redirect(url_for('challenge_detail', challenge_id=challenge_id))
+
+    # Coerce numeric fields safely
+    try:
+        time_taken_seconds = int(res.get('time_seconds') or 0)
+    except Exception:
+        logging.exception(f"Invalid time_seconds in submit response: {res.get('time_seconds')}")
+        time_taken_seconds = 0
+
+    try:
+        points_earned = int(res.get('points') or 0)
+    except Exception:
+        logging.exception(f"Invalid points in submit response: {res.get('points')}")
+        points_earned = 0
+
+    mins, secs = divmod(time_taken_seconds, 60)
+    time_str = f"{mins}m {secs}s" if mins > 0 else f"{secs}s"
+    bonus = points_earned - (challenge.get('points_reward') or 0)
+    if bonus > 0:
+        flash(f"Correct! Completed in {time_str}. You earned {challenge.get('points_reward')} + {bonus} speed bonus = {points_earned} points!", "success")
+    else:
+        flash(f"Correct! Completed in {time_str}. You earned {points_earned} points!", "success")
+
+    try:
+        data = db_client.get_user_by_id(current_user.id)
+        if data:
+            current_user.points = data.get('points')
+    except Exception:
+        pass
+
+    # Redirect back to the challenge page (PRG) so URL is /challenge/<id>
+    return redirect(url_for('challenge_detail', challenge_id=challenge_id))
 
 @app.route('/rules')
 def rules():
@@ -603,6 +648,10 @@ def reset_password():
 @app.route('/decoders')
 def decoders():
     return render_template('decoders.html')
+
+@app.route('/terms')
+def terms():
+    return render_template('terms.html')
 
 if __name__ == '__main__':
     # Simplified runtime for basic HTTP development
